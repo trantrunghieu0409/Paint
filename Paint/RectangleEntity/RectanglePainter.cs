@@ -1,8 +1,13 @@
-﻿using System;
+﻿using IContract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace RectangleEntity
 {
@@ -21,7 +26,7 @@ namespace RectangleEntity
                 Width = width,
                 Height = height,
                 StrokeThickness = 1,
-                Stroke = new SolidColorBrush(Colors.Red)
+                Stroke = new System.Windows.Media.SolidColorBrush(Colors.Red)
             };
             Canvas.SetLeft(element, rectangle.TopLeft.X);
             Canvas.SetTop(element, rectangle.TopLeft.Y);
