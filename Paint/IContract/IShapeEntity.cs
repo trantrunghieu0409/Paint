@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace IContract
+{
+    public interface IShapeEntity : ICloneable
+    {
+        string Name { get; }
+        BitmapImage Icon { get; }
+
+        void HandleStart(Point point);
+        void HandleEnd(Point point);
+    }
+}
