@@ -1,4 +1,5 @@
 ﻿using IContract;
+using Paint.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,13 +27,9 @@ namespace Paint
         // State
         bool _isDrawing = false;
         string _currentType = "";
-        IShapeEntity _preview = null;
+        IShapeEntity _preview;
         Point _start;
         List<IShapeEntity> _drawnShapes = new List<IShapeEntity>();
-
-        // Cấu hình
-        Dictionary<string, IPaintBusiness> _painterPrototypes = new Dictionary<string, IPaintBusiness>();
-        Dictionary<string, IShapeEntity> _shapesPrototypes = new Dictionary<string, IShapeEntity>();
 
         public MainWindow()
         {
@@ -41,49 +38,12 @@ namespace Paint
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            /* Nạp tất cả dll, tìm kiếm entity và business */
-            var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
-            var folderInfo = new DirectoryInfo(exeFolder);
-            var dllFiles = folderInfo.GetFiles("*.dll");
+            Config.firstConfig();
 
-            foreach (var dll in dllFiles)
-            {
-                Assembly assembly = Assembly.LoadFrom(dll.FullName);
-
-                Type[] types = assembly.GetTypes();
-
-                // Giả định: 1 dll chỉ có 1 entity và 1 business tương ứng
-                IShapeEntity? entity = null;
-                IPaintBusiness? business = null;
-
-                foreach (Type type in types)
-                {
-                    if (type.IsClass)
-                    {
-                        if (typeof(IShapeEntity).IsAssignableFrom(type))
-                        {
-                            entity = (Activator.CreateInstance(type) as IShapeEntity)!;
-                        }
-
-                        if (typeof(IPaintBusiness).IsAssignableFrom(type))
-                        {
-                            business = (Activator.CreateInstance(type) as IPaintBusiness)!;
-                        }
-                    }
-                }
-
-                //var img = new Bitmap
-                if (entity != null)
-                {
-                    _shapesPrototypes.Add(entity!.Name, entity);
-                    _painterPrototypes.Add(entity!.Name, business!);
-                }
-            }
-
-            Title = $"Tìm thấy {_shapesPrototypes.Count} hình";
+            Title = $"Tìm thấy {Config.shapesPrototypes.Count} hình";
 
             // Tạo ra các nút bấm tương ứng
-            foreach (var (name, entity) in _shapesPrototypes)
+            foreach (var (name, entity) in Config.shapesPrototypes)
             {
                 var button = new Button();
                 button.Content = name;
@@ -96,10 +56,10 @@ namespace Paint
                 actionsStackPanel.Children.Add(button);
             }
 
-            if (_shapesPrototypes.Count > 0)
+            if (Config.shapesPrototypes.Count > 0)
             {
                 //Lựa chọn nút bấm đầu tiên
-                var (key, shape) = _shapesPrototypes.ElementAt(0);
+                var (key, shape) = Config.shapesPrototypes.ElementAt(0);
                 _currentType = key;
                 _preview = (shape.Clone() as IShapeEntity)!;
             }
@@ -113,7 +73,7 @@ namespace Paint
             var entity = button!.Tag as IShapeEntity;
 
             _currentType = entity!.Name;
-            _preview = (_shapesPrototypes[entity.Name].Clone() as IShapeEntity)!;
+            _preview = (Config.shapesPrototypes[entity.Name].Clone() as IShapeEntity)!;
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -137,13 +97,13 @@ namespace Paint
                 // Vẽ lại những hình đã vẽ trước đó
                 foreach (var item in _drawnShapes)
                 {
-                    var painter = _painterPrototypes[item.Name];
+                    var painter = Config.painterPrototypes[item.Name];
                     var shape = painter.Draw(item);
 
                     canvas.Children.Add(shape);
                 }
 
-                var previewPainter = _painterPrototypes[_preview.Name];
+                var previewPainter = Config.painterPrototypes[_preview.Name];
                 var previewElement = previewPainter.Draw(_preview);
                 canvas.Children.Add(previewElement);
             }
@@ -157,7 +117,7 @@ namespace Paint
 
             _preview.HandleEnd(end);
 
-            _drawnShapes.Add(_preview.Clone() as IShapeEntity);
+            _drawnShapes.Add((IShapeEntity)_preview.Clone());
         }
     }
 }
