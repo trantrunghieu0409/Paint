@@ -22,7 +22,7 @@ namespace Paint
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Fluent.RibbonWindow
     {
         // State
         bool _isDrawing = false;
@@ -118,6 +118,131 @@ namespace Paint
             _preview.HandleEnd(end);
 
             _drawnShapes.Add((IShapeEntity)_preview.Clone());
+        }
+
+        private void createNewButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void openFileButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void saveFileButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void importButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void exportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EditMode_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void undoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void redoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void pasteButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void iconListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void dashComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void sizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicBlack_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicOrange_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicYellow_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicBlue_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicGreen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicPurple_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicPink_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicBrown_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void editColorButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void copyButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicGray_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicRed_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
