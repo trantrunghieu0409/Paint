@@ -6,7 +6,7 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:local="clr-namespace:Paint"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="MainWindow" Height="450" Width="1000" Loaded="Window_Loaded">
     <Fluent:RibbonWindow.Resources>
         <Style x:Key="DisableMouseOver" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
@@ -21,8 +21,7 @@
             </Setter>
         </Style>
     </Fluent:RibbonWindow.Resources>
-    <DockPanel LastChildFill="True">
-        <StackPanel Name="actionsStackPanel" Orientation="Horizontal" Height="50" DockPanel.Dock="Top">
+    <StackPanel Name="actionsStackPanel">
             <Fluent:Ribbon>
                 <!--Backstage-->
                 <Fluent:Ribbon.Menu>
@@ -231,13 +230,12 @@
                     </Fluent:RibbonGroupBox>
                 </Fluent:RibbonTabItem>
             </Fluent:Ribbon>
-        </StackPanel>
-        <Grid>
-            <Canvas x:Name="canvas" Background="Gray" Focusable="False" >
-            </Canvas>
-            <Border Name="border" Background="Transparent" MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" MouseUp="Border_MouseUp">
-            </Border>
+            <Grid>
+                <Canvas x:Name="canvas" Background="Gray" Focusable="False" Height="310" >
+                </Canvas>
+                <Border Name="border" Background="Transparent" MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" MouseUp="Border_MouseUp">
+                </Border>
 
-        </Grid>
-    </DockPanel>
+            </Grid>
+        </StackPanel>
 </Fluent:RibbonWindow>

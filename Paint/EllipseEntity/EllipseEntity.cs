@@ -12,7 +12,7 @@ namespace EllipseEntity
 
         public string Name => "Ellipse";
 
-        public BitmapImage Icon => throw new NotImplementedException();
+        public BitmapImage Icon => new BitmapImage(new Uri("Images/ellipse.png", UriKind.Relative));
 
         BitmapImage IShapeEntity.Icon => throw new NotImplementedException();
 

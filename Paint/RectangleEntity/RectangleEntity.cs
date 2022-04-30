@@ -16,7 +16,7 @@ namespace RectangleEntity
 
         public string Name => "Rectangle";
 
-        public BitmapImage Icon => throw new NotImplementedException();
+        public BitmapImage Icon => new BitmapImage(new Uri("Images/rectangle.png", UriKind.Relative));
 
         public void HandleStart(Point point)
         {

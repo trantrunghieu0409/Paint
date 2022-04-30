@@ -30,6 +30,7 @@ namespace Paint
         IShapeEntity _preview;
         Point _start;
         List<IShapeEntity> _drawnShapes = new List<IShapeEntity>();
+        List<IShapeEntity> allShape = new List<IShapeEntity>();
 
         public MainWindow()
         {
@@ -43,18 +44,26 @@ namespace Paint
             Title = $"Tìm thấy {Config.shapesPrototypes.Count} hình";
 
             // Tạo ra các nút bấm tương ứng
-            foreach (var (name, entity) in Config.shapesPrototypes)
+            
+            foreach (IShapeEntity shape in Config.shapesPrototypes.Values)
             {
-                var button = new Button();
-                button.Content = name;
-                button.Tag = entity;
-                button.Width = 80;
-                button.Height = 35;
-                button.Click += Button_Click;
-
-                //TODO: thêm các nút bấm vào giao diện
-                actionsStackPanel.Children.Add(button);
+                allShape.Add(shape);
             }
+            iconListView.ItemsSource = allShape;
+
+
+            //foreach (var (name, entity) in Config.shapesPrototypes)
+            //{
+            //    var button = new Button();
+            //    button.Content = name;
+            //    button.Tag = entity;
+            //    button.Width = 80;
+            //    button.Height = 35;
+            //    button.Click += Button_Click;
+
+            //    //TODO: thêm các nút bấm vào giao diện
+            //    actionsStackPanel.Children.Add(button);
+            //}
 
             if (Config.shapesPrototypes.Count > 0)
             {
@@ -172,7 +181,14 @@ namespace Paint
 
         private void iconListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (this.allShape.Count == 0)
+                return;
 
+            var index = iconListView.SelectedIndex;
+
+            _currentType = allShape[index].Name;
+
+            _preview = (Config.shapesPrototypes[allShape[index].Name].Clone() as IShapeEntity)!;
         }
 
         private void dashComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

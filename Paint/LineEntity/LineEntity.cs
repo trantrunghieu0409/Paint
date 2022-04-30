@@ -17,7 +17,7 @@ namespace LineEntity
 
         public string Name => "Line";
 
-        public BitmapImage Icon => new BitmapImage(new Uri("", UriKind.Relative));
+        public BitmapImage Icon => new BitmapImage(new Uri("Images/line.png", UriKind.Relative));
 
         public object Clone()
         {
