@@ -278,10 +278,11 @@ namespace Paint
 
         }
 
-        public void ExportToPng(String path, Canvas surface)
+        public void ExportToPng(String path, Canvas surface1)
         {
             if (path == null) return;
 
+            Canvas surface = surface1;
             surface.Background = new SolidColorBrush(Colors.White);
 
             // Save current canvas transform
