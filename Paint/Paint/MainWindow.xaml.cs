@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 
 namespace Paint
 {
@@ -26,11 +27,14 @@ namespace Paint
     {
         // State
         bool _isDrawing = false;
+        bool _isSaved = false;
         string _currentType = "";
         IShapeEntity _preview;
         Point _start;
         List<IShapeEntity> _drawnShapes = new List<IShapeEntity>();
         List<IShapeEntity> allShape = new List<IShapeEntity>();
+        private Stack<IShapeEntity> _buffer = new Stack<IShapeEntity>();
+        string _backgroundImagePath = "";
 
         public MainWindow()
         {
@@ -131,44 +135,288 @@ namespace Paint
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_backgroundImagePath.Length > 0 && _drawnShapes.Count == 0)
+            {
+                _backgroundImagePath = "";
+                canvas.Background = new SolidColorBrush(Colors.White);
+            }
+            if (_drawnShapes.Count == 0)
+            {
+                return;
+            }
 
+
+            if (_isSaved)
+            {
+                ResetToDefault();
+                return;
+            }
+
+            var result = MessageBox.Show("Do you want to save current file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
+
+            if (MessageBoxResult.Yes == result)
+            {
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Objects
+                };
+
+                var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
+
+                StringBuilder builder = new StringBuilder();
+                builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
+                string content = builder.ToString();
+
+
+                var dialog = new System.Windows.Forms.SaveFileDialog();
+
+                dialog.Filter = "JSON (*.json)|*.json";
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    string path = dialog.FileName;
+                    File.WriteAllText(path, content);
+                }
+
+                ResetToDefault();
+                _isSaved = true;
+            }
+            else if (MessageBoxResult.No == result)
+            {
+                ResetToDefault();
+                return;
+            }
+            else if (MessageBoxResult.Cancel == result)
+            {
+                return;
+            }
         }
 
         private void openFileButton_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new System.Windows.Forms.OpenFileDialog();
 
+            dialog.Filter = "JSON (*.json)|*.json";
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = dialog.FileName;
+
+                string[] content = File.ReadAllLines(path);
+
+                string background = "";
+                string json = content[0];
+                if (content.Length > 1)
+                    background = content[1];
+                //string json = File.ReadAllText(path);
+
+
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Objects
+                };
+
+                _drawnShapes.Clear();
+                _backgroundImagePath = background;
+                canvas.Children.Clear();
+
+                List<IShapeEntity> containers = JsonConvert.DeserializeObject<List<IShapeEntity>>(json, settings);
+
+                foreach (var item in containers)
+                    _drawnShapes.Add(item);
+
+                if (_backgroundImagePath.Length != 0)
+                {
+                    ImageBrush brush = new ImageBrush();
+                    brush.ImageSource = new BitmapImage(new Uri(_backgroundImagePath, UriKind.Absolute));
+                    canvas.Background = brush;
+                }
+
+                //MessageBox.Show($"{background}");
+            }
+
+            foreach (var shape in _drawnShapes)
+            {
+                var painter = Config.painterPrototypes[shape.Name];
+                var item = painter.Draw(shape);
+                canvas.Children.Add(item);
+            }
         }
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "United"; // Default file name
-            dialog.DefaultExt = ".png"; // Default file extension
-            dialog.Filter = "PNG (.png)|*.png"; // Filter files by extension
 
-            // Show save file dialog box
-            bool? result = dialog.ShowDialog();
+            //var dialog = new Microsoft.Win32.SaveFileDialog();
+            //dialog.FileName = "United"; // Default file name
+            //dialog.DefaultExt = ".png"; // Default file extension
+            //dialog.Filter = "PNG (.png)|*.png"; // Filter files by extension
 
-            // Process save file dialog box results
-            if (result == true)
+            ////var dialog = new Microsoft.Win32.SaveFileDialog();
+            ////dialog.FileName = "Document"; // Default file name
+            ////dialog.DefaultExt = ".txt"; // Default file extension
+            ////dialog.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
+
+            ////// Show save file dialog box
+            ////bool? result = dialog.ShowDialog();
+
+            ////// Process save file dialog box results
+            ////if (result == true)
+            ////{
+            ////    // Save document
+            ////    string filename = dialog.FileName;
+            ////}
+
+            //var settings = new JsonSerializerSettings()
+            //{
+            //    TypeNameHandling = TypeNameHandling.Objects
+            //};
+
+            //var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
+
+            //// experience 
+            //StringBuilder builder = new StringBuilder();
+            //builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
+            //string content = builder.ToString();
+
+
+
+            ////var dialog = new System.Windows.Forms.SaveFileDialog();
+
+            //dialog.Filter = "JSON (*.json)|*.json";
+
+            ////if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            ////{
+
+            ////    // Save document
+            ////    string filename = dialog.FileName;
+            ////    string saveFileName = System.IO.Path.GetFullPath(filename);
+
+
+            ////    this.ExportToPng(saveFileName, canvas);
+
+            ////    string path = dialog.FileName;
+            ////    File.WriteAllText(path, content);
+            ////    _isSaved = true;
+
+            ////}
+
+            var settings = new JsonSerializerSettings()
             {
-                // Save document
-                string filename = dialog.FileName;
-                string saveFileName = System.IO.Path.GetFullPath(filename);
-                
-     
-                this.ExportToPng(saveFileName, canvas);
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+
+            var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
+            string content = builder.ToString();
+
+
+            var dialog = new System.Windows.Forms.SaveFileDialog();
+
+            dialog.Filter = "JSON (*.json)|*.json";
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = dialog.FileName;
+                File.WriteAllText(path, content);
+                _isSaved = true;
             }
+        }
+
+        private void SaveCanvasToImage(Canvas canvas, string filename, string extension = "png")
+        {
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)canvas.Width, (int)canvas.Height, 96d, 96d, PixelFormats.Pbgra32);
+            canvas.Measure(new Size((int)canvas.Width, (int)canvas.Height));
+            canvas.Arrange(new Rect(new Size((int)canvas.Width, (int)canvas.Height)));
+
+            renderBitmap.Render(canvas);
+
+            switch (extension)
+            {
+                case "png":
+                    PngBitmapEncoder pngEncoder = new PngBitmapEncoder();
+                    pngEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    using (FileStream file = File.Create(filename))
+                    {
+                        pngEncoder.Save(file);
+                    }
+                    break;
+                case "jpeg":
+                    JpegBitmapEncoder jpegEncoder = new JpegBitmapEncoder();
+                    jpegEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    using (FileStream file = File.Create(filename))
+                    {
+                        jpegEncoder.Save(file);
+                    }
+                    break;
+                case "bmp":
+
+                    BmpBitmapEncoder bitmapEncoder = new BmpBitmapEncoder();
+                    bitmapEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    using (FileStream file = File.Create(filename))
+                    {
+                        bitmapEncoder.Save(file);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void ResetToDefault()
+        {
+            if (this.allShape.Count == 0)
+                return;
+
+            _isSaved = false;
+            _isDrawing = false;
+
+            _drawnShapes.Clear();
+
+            _backgroundImagePath = "";
+
+            dashComboBox.SelectedIndex = 0;
+            sizeComboBox.SelectedIndex = 0;
+
+            EditMode.Header = "Draw Mode";
+            canvas.Children.Clear();
+            canvas.Background = new SolidColorBrush(Colors.White);
         }
 
         private void importButton_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new System.Windows.Forms.OpenFileDialog();
+            dialog.Filter = "PNG (*.png)|*.png| JPEG (*.jpeg)|*.jpeg| BMP (*.bmp)|*.bmp";
 
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = dialog.FileName;
+
+                _backgroundImagePath = path;
+
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri(path, UriKind.Absolute));
+                canvas.Background = brush;
+            }
         }
 
         private void exportButton_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new System.Windows.Forms.SaveFileDialog();
+            dialog.Filter = "PNG (*.png)|*.png| JPEG (*.jpeg)|*.jpeg| BMP (*.bmp)|*.bmp";
 
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = dialog.FileName;
+                string extension = path.Substring(path.LastIndexOf('\\') + 1).Split('.')[1];
+
+                SaveCanvasToImage(canvas, path, extension);
+            }
+            _isSaved = true;
         }
 
         private void EditMode_Click(object sender, RoutedEventArgs e)
@@ -178,12 +426,40 @@ namespace Paint
 
         private void undoButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_drawnShapes.Count == 0)
+                return;
+            if (_drawnShapes.Count == 0 && _buffer.Count == 0)
+                return;
 
+            // Push last shape into buffer and remove it from final list, then re-draw canvas
+            int lastIndex = _drawnShapes.Count - 1;
+            _buffer.Push(_drawnShapes[lastIndex]);
+            _drawnShapes.RemoveAt(lastIndex);
+
+            RedrawCanvas();
         }
 
         private void redoButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_buffer.Count == 0)
+                return;
+            if (_drawnShapes.Count == 0 && _buffer.Count == 0)
+                return;
 
+            _drawnShapes.Add(_buffer.Pop());
+            RedrawCanvas();
+        }
+
+        private void RedrawCanvas()
+        {
+            canvas.Children.Clear();
+            Console.WriteLine(_drawnShapes.Count);
+            foreach (var shape in (_drawnShapes))
+            {
+                var painter = Config.painterPrototypes[shape.Name];
+                var item = painter.Draw(shape);
+                canvas.Children.Add(item);
+            }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
