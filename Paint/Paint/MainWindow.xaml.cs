@@ -141,7 +141,20 @@ namespace Paint
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = "Document"; // Default file name
+            dialog.DefaultExt = ".txt"; // Default file extension
+            dialog.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
 
+            // Show save file dialog box
+            bool? result = dialog.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dialog.FileName;
+            }
         }
 
         private void importButton_Click(object sender, RoutedEventArgs e)
