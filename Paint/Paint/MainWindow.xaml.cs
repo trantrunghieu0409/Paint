@@ -142,9 +142,9 @@ namespace Paint
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "Document"; // Default file name
-            dialog.DefaultExt = ".txt"; // Default file extension
-            dialog.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
+            dialog.FileName = "United"; // Default file name
+            dialog.DefaultExt = ".png"; // Default file extension
+            dialog.Filter = "PNG (.png)|*.png"; // Filter files by extension
 
             // Show save file dialog box
             bool? result = dialog.ShowDialog();
@@ -154,6 +154,10 @@ namespace Paint
             {
                 // Save document
                 string filename = dialog.FileName;
+                string saveFileName = System.IO.Path.GetFullPath(filename);
+                
+     
+                this.ExportToPng(saveFileName, canvas);
             }
         }
 
@@ -274,9 +278,11 @@ namespace Paint
 
         }
 
-        public void ExportToPng(Uri path, Canvas surface)
+        public void ExportToPng(String path, Canvas surface)
         {
             if (path == null) return;
+
+            surface.Background = new SolidColorBrush(Colors.White);
 
             // Save current canvas transform
             Transform transform = surface.LayoutTransform;
@@ -301,7 +307,7 @@ namespace Paint
             renderBitmap.Render(surface);
 
             // Create a file stream for saving image
-            using (FileStream outStream = new FileStream(path.LocalPath, FileMode.Create))
+            using (FileStream outStream = new FileStream(path, FileMode.Create))
             {
                 // Use png encoder for our data
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
@@ -313,6 +319,8 @@ namespace Paint
 
             // Restore previously saved layout
             surface.LayoutTransform = transform;
+
+            
         }
     }
 }

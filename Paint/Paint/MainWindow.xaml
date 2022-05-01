@@ -231,7 +231,7 @@
                 </Fluent:RibbonTabItem>
             </Fluent:Ribbon>
             <Grid>
-                <Canvas x:Name="canvas" Background="Gray" Focusable="False" Height="310" >
+            <Canvas x:Name="canvas" Background="Gray" Focusable="False" Height="310" Width="1000" >
                 </Canvas>
                 <Border Name="border" Background="Transparent" MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" MouseUp="Border_MouseUp">
                 </Border>
