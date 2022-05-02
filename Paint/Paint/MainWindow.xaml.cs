@@ -17,6 +17,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
+using System.Collections;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using Newtonsoft;
 
 namespace Paint
 {
@@ -194,9 +198,88 @@ namespace Paint
 
         private void openFileButton_Click(object sender, RoutedEventArgs e)
         {
+            //var dialog = new System.Windows.Forms.OpenFileDialog();
+
+            //dialog.Filter = "JSON (*.json)|*.json";
+
+            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    string path = dialog.FileName;
+
+            //    string[] content = File.ReadAllLines(path);
+
+            //    string background = "";
+            //    string json = content[0];
+            //    if (content.Length > 1)
+            //        background = content[1];
+            //    //string json = File.ReadAllText(path);
+
+
+            //    var settings = new JsonSerializerSettings()
+            //    {
+            //        TypeNameHandling = TypeNameHandling.Objects
+            //    };
+
+            //    _drawnShapes.Clear();
+            //    _backgroundImagePath = background;
+            //    canvas.Children.Clear();
+
+            //    List<IShapeEntity> containers = JsonConvert.DeserializeObject<List<IShapeEntity>>(json, settings);
+
+            //    foreach (var item in containers)
+            //        _drawnShapes.Add(item);
+
+            //    if (_backgroundImagePath.Length != 0)
+            //    {
+            //        ImageBrush brush = new ImageBrush();
+            //        brush.ImageSource = new BitmapImage(new Uri(_backgroundImagePath, UriKind.Absolute));
+            //        canvas.Background = brush;
+            //    }
+
+            //    //MessageBox.Show($"{background}");
+            //}
+
+            //foreach (var shape in _drawnShapes)
+            //{
+            //    var painter = Config.painterPrototypes[shape.Name];
+            //    var item = painter.Draw(shape);
+            //    canvas.Children.Add(item);
+            //}
+
+
+            // New
+            //var dialog = new System.Windows.Forms.OpenFileDialog();
+
+            //dialog.Filter = "DAT File (.dat)|*.dat";
+
+            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    string path = dialog.FileName;
+
+            //    string[] src = File.ReadAllLines(path);
+            //    string content = "";
+            //    foreach (string line in src)
+            //        content += line;
+
+            //    _drawnShapes.Clear();
+            //    canvas.Children.Clear();
+
+            //    string[] shapes = content.Split('(', ')');
+            //    foreach (string shape in shapes)
+            //    {
+            //        string[] properties = shape.Split(';');
+            //        Dictionary<string, object> dict = new Dictionary<string, object>();
+            //        dict.Add(properties[0], properties[1]);
+
+            //        IShapeEntity shapeEntity = (Config.shapesPrototypes[dict["Name"].ToString()].Clone() as IShapeEntity)!;
+
+
+            //    }
+            //}
+
             var dialog = new System.Windows.Forms.OpenFileDialog();
 
-            dialog.Filter = "JSON (*.json)|*.json";
+            dialog.Filter = "DAT File (.dat)|*.dat";
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -208,8 +291,9 @@ namespace Paint
                 string json = content[0];
                 if (content.Length > 1)
                     background = content[1];
-                //string json = File.ReadAllText(path);
 
+                byte[] textAsBytes = System.Convert.FromBase64String(json);
+                var src = Encoding.ASCII.GetString(textAsBytes);
 
                 var settings = new JsonSerializerSettings()
                 {
@@ -220,7 +304,7 @@ namespace Paint
                 _backgroundImagePath = background;
                 canvas.Children.Clear();
 
-                List<IShapeEntity> containers = JsonConvert.DeserializeObject<List<IShapeEntity>>(json, settings);
+                List<IShapeEntity> containers = JsonConvert.DeserializeObject<List<IShapeEntity>>(src, settings);
 
                 foreach (var item in containers)
                     _drawnShapes.Add(item);
@@ -231,8 +315,6 @@ namespace Paint
                     brush.ImageSource = new BitmapImage(new Uri(_backgroundImagePath, UriKind.Absolute));
                     canvas.Background = brush;
                 }
-
-                //MessageBox.Show($"{background}");
             }
 
             foreach (var shape in _drawnShapes)
@@ -245,27 +327,7 @@ namespace Paint
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
-
-            //var dialog = new Microsoft.Win32.SaveFileDialog();
-            //dialog.FileName = "United"; // Default file name
-            //dialog.DefaultExt = ".png"; // Default file extension
-            //dialog.Filter = "PNG (.png)|*.png"; // Filter files by extension
-
-            ////var dialog = new Microsoft.Win32.SaveFileDialog();
-            ////dialog.FileName = "Document"; // Default file name
-            ////dialog.DefaultExt = ".txt"; // Default file extension
-            ////dialog.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
-
-            ////// Show save file dialog box
-            ////bool? result = dialog.ShowDialog();
-
-            ////// Process save file dialog box results
-            ////if (result == true)
-            ////{
-            ////    // Save document
-            ////    string filename = dialog.FileName;
-            ////}
-
+            // Official
             //var settings = new JsonSerializerSettings()
             //{
             //    TypeNameHandling = TypeNameHandling.Objects
@@ -273,36 +335,61 @@ namespace Paint
 
             //var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
 
-            //// experience 
             //StringBuilder builder = new StringBuilder();
             //builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
             //string content = builder.ToString();
 
 
-
-            ////var dialog = new System.Windows.Forms.SaveFileDialog();
+            //var dialog = new System.Windows.Forms.SaveFileDialog();
 
             //dialog.Filter = "JSON (*.json)|*.json";
 
-            ////if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            ////{
+            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    string path = dialog.FileName;
+            //    File.WriteAllText(path, content);
+            //    _isSaved = true;
+            //}
 
-            ////    // Save document
-            ////    string filename = dialog.FileName;
-            ////    string saveFileName = System.IO.Path.GetFullPath(filename);
 
+            // New
+            //var dialog = new System.Windows.Forms.SaveFileDialog();
 
-            ////    this.ExportToPng(saveFileName, canvas);
+            //dialog.Filter = "DAT File (.dat)|*.dat";
 
-            ////    string path = dialog.FileName;
-            ////    File.WriteAllText(path, content);
-            ////    _isSaved = true;
+            //string content = "";
 
-            ////}
+            //for (int index = 0; index < _drawnShapes.Count; index++)
+            //{
+            //    var dict = DictionaryFromType(_drawnShapes.ElementAt(index));
+
+            //    content += "(";
+            //    for (int count = 0; count < dict.Count; count++)
+            //    {
+            //        var element = dict.ElementAt(count);
+            //        var Key = element.Key;
+            //        var Value = element.Value;
+            //        content += Key + ":" + Value;
+
+            //        if (count != dict.Count - 1)
+            //            content += ";";
+            //    }
+            //    content += ")";
+            //}
+
+            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    string path = dialog.FileName;
+
+            //    File.WriteAllText(path, content);
+
+            //    _isSaved = true;
+            //}
+
 
             var settings = new JsonSerializerSettings()
             {
-                TypeNameHandling = TypeNameHandling.Objects
+               TypeNameHandling = TypeNameHandling.Objects
             };
 
             var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
@@ -311,17 +398,33 @@ namespace Paint
             builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
             string content = builder.ToString();
 
+            byte[] bytes = Encoding.ASCII.GetBytes(content);
+            string data = Convert.ToBase64String(bytes);
 
             var dialog = new System.Windows.Forms.SaveFileDialog();
 
-            dialog.Filter = "JSON (*.json)|*.json";
+            dialog.Filter = "DAT File (.dat)|*.dat";
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string path = dialog.FileName;
-                File.WriteAllText(path, content);
+                File.WriteAllText(path, data);
                 _isSaved = true;
             }
+        }
+
+        public Dictionary<string, object> DictionaryFromType(object atype)
+        {
+            if (atype == null) return new Dictionary<string, object>();
+            Type t = atype.GetType();
+            PropertyInfo[] props = t.GetProperties();
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            foreach (PropertyInfo prp in props)
+            {
+                object value = prp.GetValue(atype, new object[] { });
+                dict.Add(prp.Name, value);
+            }
+            return dict;
         }
 
         private void SaveCanvasToImage(Canvas canvas, string filename, string extension = "png")
