@@ -223,7 +223,7 @@ namespace Paint
                 _drawnShapes.Clear();
                 canvas.Children.Clear();
 
-                string[] shapes = content.Split('(', ')', StringSplitOptions.RemoveEmptyEntries);
+                string[] shapes = content.Split('[', ']', StringSplitOptions.RemoveEmptyEntries);
                 foreach (string shape in shapes)
                 {
                     string[] properties = shape.Split(';', StringSplitOptions.RemoveEmptyEntries);
@@ -239,23 +239,13 @@ namespace Paint
                     Point startPoint = new Point(double.Parse(startCoords[0]), double.Parse(startCoords[1]));
 
                     var end = dict.ElementAt(1);
-                    string[] endCoords = start.Value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                    string[] endCoords = end.Value.Split(',', StringSplitOptions.RemoveEmptyEntries);
                     Point endPoint = new Point(double.Parse(endCoords[0]), double.Parse(endCoords[1]));
 
-                    IShapeEntity shapeEntity = (Config.shapesPrototypes[dict["Name"].ToString()].Clone() as IShapeEntity)!;
+                    IShapeEntity shapeEntity = (Config.shapesPrototypes[dict["Name"]].Clone() as IShapeEntity)!;
                     shapeEntity.HandleStart(startPoint);
                     shapeEntity.HandleEnd(endPoint);
-                    
-                    //var dict1 = DictionaryFromType(shapeEntity);
-                    //for (int count = 0; count < dict.Count; count++)
-                    //{
-                    //    var element = dict1.ElementAt(count);
-                    //    var Key = element.Key;
-                    //    var Value = element.Value;
-
-                    //    System.Diagnostics.Debug.WriteLine(Key + " " + Value);
-                    //}
-
+                   
                     containers.Add(shapeEntity);
                 }
             }
@@ -265,16 +255,6 @@ namespace Paint
 
             foreach (var shape in _drawnShapes)
             {
-                var dict1 = DictionaryFromType(shape);
-                for (int count = 0; count < dict1.Count; count++)
-                {
-                    var element = dict1.ElementAt(count);
-                    var Key = element.Key;
-                    var Value = element.Value;
-
-                    System.Diagnostics.Debug.WriteLine(Key + " " + Value);
-                }
-
                 var painter = Config.painterPrototypes[shape.Name];
                 var item = painter.Draw(shape);
                 canvas.Children.Add(item);
@@ -342,7 +322,7 @@ namespace Paint
             {
                 var dict = DictionaryFromType(_drawnShapes.ElementAt(index));
 
-                content += "(";
+                content += "[";
                 for (int count = 0; count < dict.Count; count++)
                 {
                     var element = dict.ElementAt(count);
@@ -355,7 +335,7 @@ namespace Paint
                     if (count != dict.Count - 1)
                         content += ";";
                 }
-                content += ")";
+                content += "]";
             }
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
