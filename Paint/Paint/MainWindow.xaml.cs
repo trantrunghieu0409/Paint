@@ -201,56 +201,7 @@ namespace Paint
 
         private void openFileButton_Click(object sender, RoutedEventArgs e)
         {
-            //var dialog = new System.Windows.Forms.OpenFileDialog();
-
-            //dialog.Filter = "JSON (*.json)|*.json";
-
-            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    string path = dialog.FileName;
-
-            //    string[] content = File.ReadAllLines(path);
-
-            //    string background = "";
-            //    string json = content[0];
-            //    if (content.Length > 1)
-            //        background = content[1];
-            //    //string json = File.ReadAllText(path);
-
-
-            //    var settings = new JsonSerializerSettings()
-            //    {
-            //        TypeNameHandling = TypeNameHandling.Objects
-            //    };
-
-            //    _drawnShapes.Clear();
-            //    _backgroundImagePath = background;
-            //    canvas.Children.Clear();
-
-            //    List<IShapeEntity> containers = JsonConvert.DeserializeObject<List<IShapeEntity>>(json, settings);
-
-            //    foreach (var item in containers)
-            //        _drawnShapes.Add(item);
-
-            //    if (_backgroundImagePath.Length != 0)
-            //    {
-            //        ImageBrush brush = new ImageBrush();
-            //        brush.ImageSource = new BitmapImage(new Uri(_backgroundImagePath, UriKind.Absolute));
-            //        canvas.Background = brush;
-            //    }
-
-            //    //MessageBox.Show($"{background}");
-            //}
-
-            //foreach (var shape in _drawnShapes)
-            //{
-            //    var painter = Config.painterPrototypes[shape.Name];
-            //    var item = painter.Draw(shape);
-            //    canvas.Children.Add(item);
-            //}
-
-
-            // New
+            // New Official
             var dialog = new System.Windows.Forms.OpenFileDialog();
 
             dialog.Filter = "DAT File (.dat)|*.dat";
@@ -314,12 +265,22 @@ namespace Paint
 
             foreach (var shape in _drawnShapes)
             {
+                var dict1 = DictionaryFromType(shape);
+                for (int count = 0; count < dict1.Count; count++)
+                {
+                    var element = dict1.ElementAt(count);
+                    var Key = element.Key;
+                    var Value = element.Value;
+
+                    System.Diagnostics.Debug.WriteLine(Key + " " + Value);
+                }
+
                 var painter = Config.painterPrototypes[shape.Name];
                 var item = painter.Draw(shape);
                 canvas.Children.Add(item);
             }
 
-            // New official
+            // Official
             //var dialog = new System.Windows.Forms.OpenFileDialog();
 
             //dialog.Filter = "DAT File (.dat)|*.dat";
@@ -370,32 +331,7 @@ namespace Paint
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
-            // Official
-            //var settings = new JsonSerializerSettings()
-            //{
-            //    TypeNameHandling = TypeNameHandling.Objects
-            //};
-
-            //var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
-
-            //StringBuilder builder = new StringBuilder();
-            //builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
-            //string content = builder.ToString();
-
-
-            //var dialog = new System.Windows.Forms.SaveFileDialog();
-
-            //dialog.Filter = "JSON (*.json)|*.json";
-
-            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    string path = dialog.FileName;
-            //    File.WriteAllText(path, content);
-            //    _isSaved = true;
-            //}
-
-
-            // New
+            // New official
             var dialog = new System.Windows.Forms.SaveFileDialog();
 
             dialog.Filter = "DAT File (.dat)|*.dat";
@@ -430,6 +366,7 @@ namespace Paint
             }
 
 
+            // Official
             //var settings = new JsonSerializerSettings()
             //{
             //   TypeNameHandling = TypeNameHandling.Objects
