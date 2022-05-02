@@ -155,34 +155,65 @@ namespace Paint
                 return;
             }
 
-            var result = MessageBox.Show("Would you like to save current file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
+            var result = MessageBox.Show("Save your changes to this file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
 
             if (MessageBoxResult.Yes == result)
             {
-                var settings = new JsonSerializerSettings()
-                {
-                    TypeNameHandling = TypeNameHandling.Objects
-                };
+                //var settings = new JsonSerializerSettings()
+                //{
+                //    TypeNameHandling = TypeNameHandling.Objects
+                //};
 
-                var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
+                //var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
 
-                StringBuilder builder = new StringBuilder();
-                builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
-                string content = builder.ToString();
+                //StringBuilder builder = new StringBuilder();
+                //builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
+                //string content = builder.ToString();
 
-                byte[] bytes = Encoding.ASCII.GetBytes(content);
-                string data = Convert.ToBase64String(bytes);
+                //byte[] bytes = Encoding.ASCII.GetBytes(content);
+                //string data = Convert.ToBase64String(bytes);
+
+                //var dialog = new System.Windows.Forms.SaveFileDialog();
+
+                ////dialog.Filter = "JSON (*.json)|*.json";
+                //dialog.Filter = "DAT File (.dat)|*.dat";
+
+                //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                //{
+                //    string path = dialog.FileName;
+                //    //File.WriteAllText(path, content);
+                //    File.WriteAllText(path, data);
+                //}
 
                 var dialog = new System.Windows.Forms.SaveFileDialog();
 
-                //dialog.Filter = "JSON (*.json)|*.json";
                 dialog.Filter = "DAT File (.dat)|*.dat";
+
+                string content = "";
+
+                for (int index = 0; index < _drawnShapes.Count; index++)
+                {
+                    var dict = DictionaryFromType(_drawnShapes.ElementAt(index));
+
+                    content += "[";
+                    for (int count = 0; count < dict.Count; count++)
+                    {
+                        var element = dict.ElementAt(count);
+                        var Key = element.Key;
+                        var Value = element.Value;
+                        content += Key + "#" + Value;
+
+                        if (count != dict.Count - 1)
+                            content += ";";
+                    }
+                    content += "]";
+                }
 
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     string path = dialog.FileName;
-                    //File.WriteAllText(path, content);
-                    File.WriteAllText(path, data);
+                    File.WriteAllText(path, content);
+                    _isSaved = true;
                 }
 
                 ResetToDefault();
@@ -329,8 +360,6 @@ namespace Paint
                     var Key = element.Key;
                     var Value = element.Value;
                     content += Key + "#" + Value;
-
-                    System.Diagnostics.Debug.WriteLine(Key + " " + Value);
 
                     if (count != dict.Count - 1)
                         content += ";";
