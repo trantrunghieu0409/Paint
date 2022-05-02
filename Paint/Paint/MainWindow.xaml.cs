@@ -149,14 +149,13 @@ namespace Paint
                 return;
             }
 
-
             if (_isSaved)
             {
                 ResetToDefault();
                 return;
             }
 
-            var result = MessageBox.Show("Do you want to save current file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
+            var result = MessageBox.Show("Would you like to save current file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
 
             if (MessageBoxResult.Yes == result)
             {
@@ -171,15 +170,19 @@ namespace Paint
                 builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
                 string content = builder.ToString();
 
+                byte[] bytes = Encoding.ASCII.GetBytes(content);
+                string data = Convert.ToBase64String(bytes);
 
                 var dialog = new System.Windows.Forms.SaveFileDialog();
 
-                dialog.Filter = "JSON (*.json)|*.json";
+                //dialog.Filter = "JSON (*.json)|*.json";
+                dialog.Filter = "DAT File (.dat)|*.dat";
 
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     string path = dialog.FileName;
-                    File.WriteAllText(path, content);
+                    //File.WriteAllText(path, content);
+                    File.WriteAllText(path, data);
                 }
 
                 ResetToDefault();
@@ -375,15 +378,6 @@ namespace Paint
             //            content += ";";
             //    }
             //    content += ")";
-            //}
-
-            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    string path = dialog.FileName;
-
-            //    File.WriteAllText(path, content);
-
-            //    _isSaved = true;
             //}
 
 
