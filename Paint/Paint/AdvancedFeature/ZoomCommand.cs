@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Paint.AdvancedFeature
 {
@@ -15,13 +16,29 @@ namespace Paint.AdvancedFeature
 
     internal class ZoomCommand : Command
     {
-        public static readonly int[] ZOOM_VALUE = { 25, 50, 100, 200, 300, 400, 500, 600, 700, 800 };
+        public static readonly float[] ZOOM_VALUE = { 0.25f, 0.5f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f};
 
-        public static readonly int MIN_ZOOM_VALUE = ZOOM_VALUE[0];
-        public static readonly int MAX_ZOOM_VALUE = ZOOM_VALUE.Last();
-        public static readonly int DEFAULT_ZOOM_VALUE = 100;
+        public static readonly float MIN_ZOOM_VALUE = ZOOM_VALUE[0];
+        public static readonly float MAX_ZOOM_VALUE = ZOOM_VALUE.Last();
+        public static readonly float DEFAULT_ZOOM_VALUE = 1f;
 
         ZoomType _zoomType;
+
+        public float findNearestValue(float[] arr, float value)
+        {
+            float result = arr[0] ;
+            for (int i = 0; i < arr.Length - 1; i++)
+            {
+                if (value >= arr[i] && value <= arr[i + 1])
+                {
+                    if (Math.Abs(value - arr[i]) < Math.Abs(value - arr[i + 1])) 
+                        result = arr[i];
+                    else
+                        result = arr[i + 1];
+                }
+            }
+            return result;
+        }
 
         public ZoomCommand(MainWindow app, ZoomType zoomType) : base(app)
         {
@@ -30,10 +47,10 @@ namespace Paint.AdvancedFeature
 
         public override bool Execute()
         {
-            int zoomRatio = _app.zoomRatio;
+            float zoomRatio = findNearestValue(ZOOM_VALUE, _app.zoomRatio);
             int index = Array.IndexOf(ZOOM_VALUE, zoomRatio);
 
-            int newZoomRatio = zoomRatio;
+            float newZoomRatio = zoomRatio;
             switch (_zoomType)
             {
                 case ZoomType.ZOOM_IN:

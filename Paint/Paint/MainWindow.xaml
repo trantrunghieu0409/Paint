@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:local="clr-namespace:Paint"
+        xmlns:local1="clr-namespace:Paint.Converter"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="1000" Loaded="Window_Loaded">
     <Fluent:RibbonWindow.Resources>
@@ -20,6 +21,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <local1:PercentageConverter x:Key="percentageConverter"/>
     </Fluent:RibbonWindow.Resources>
     <Grid Name="actionsStackPanel">
         <Grid.RowDefinitions>
@@ -238,40 +240,56 @@
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
 
-        <Border Name="border" Grid.Row="1" Background="Transparent" MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" PreviewMouseUp="Border_MouseUp" MouseRightButtonDown="border_MouseRightButtonDown">
-            <Canvas x:Name="canvas" Background="White" Focusable="False" 
-                Height="{Binding Path=ActualHeight, ElementName=border}"
-                Width="{Binding Path=ActualWidth, ElementName=border}">
-            </Canvas>
-            <Border.ContextMenu>
-                <ContextMenu Background="White">
-                    <MenuItem Header="Delete" Foreground="Black" Click="Delete_Click">
-                        <MenuItem.Icon>
-                            <Image Source="Images/delete.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Copy" Foreground="Black" Click="copyButton_Click">
-                        <MenuItem.Icon>
-                            <Image Source="Images/copy.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Paste" Foreground="Black" Click="pasteButton_Click">
-                        <MenuItem.Icon>
-                            <Image Source="Images/paste.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </Border.ContextMenu>
-        </Border>
+        <ScrollViewer  x:Name="ScrollViewer"  Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="LightGray">
+            <Viewbox x:Name="ViewBox"  VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Fill">
+                <Viewbox.LayoutTransform>
+                    <ScaleTransform x:Name="uiZoomTransform"
+                        ScaleX="{Binding zoomRatio}"
+                        ScaleY="{Binding zoomRatio}"/>
+                </Viewbox.LayoutTransform>
+                <Grid>
+                    <Canvas x:Name="canvas" Background="White" Focusable="False" 
+                        Width="{Binding ElementName=ScrollViewer, Path=ActualWidth}"
+                        Height="{Binding ElementName=ScrollViewer, Path=ActualHeight}">
+                    </Canvas>
+                    <Border Name="border" Background="Transparent" 
+                        MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" PreviewMouseUp="Border_MouseUp" 
+                        MouseRightButtonDown="border_MouseRightButtonDown">
+                    <Border.ContextMenu>
+                        <ContextMenu Background="White">
+                            <MenuItem Header="Delete" Foreground="Black" Click="Delete_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="Images/delete.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Copy" Foreground="Black" Click="copyButton_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="Images/copy.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Paste" Foreground="Black" Click="pasteButton_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="Images/paste.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Border.ContextMenu>
+                    </Border>
+                </Grid>
+            </Viewbox>
+        </ScrollViewer>
+
         <!-- Status bar -->
         <Fluent:StatusBar Grid.Row="2">
-            <Fluent:StatusBarItem Title="Item placed on the right side"
+            <Fluent:StatusBarItem Title="Current Zoom Ratio"
                             HorizontalAlignment="Right"
                             >
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Zoom Ratio: "/>
-                    <TextBlock Text="{Binding Path=zoomRatio, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding ElementName=uiZoomSlider, Path=Value}"/>
                     <TextBlock Text="% "/>
+                    <Slider Name="uiZoomSlider" Width="100"
+                        Minimum="25" Maximum="800" Value="{Binding zoomRatio, Mode=TwoWay, Converter={StaticResource percentageConverter}}" ValueChanged="uiZoomSlider_ValueChanged" />
                 </StackPanel>
             </Fluent:StatusBarItem>
         </Fluent:StatusBar>

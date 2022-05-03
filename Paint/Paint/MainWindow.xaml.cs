@@ -45,7 +45,7 @@ namespace Paint
         IShapeEntity? _choosenShape = null;
         IShapeEntity? _copyShape = null;
 
-        public int zoomRatio { get; set; } = ZoomCommand.DEFAULT_ZOOM_VALUE;
+        public float zoomRatio { get; set; } = ZoomCommand.DEFAULT_ZOOM_VALUE;
 
         public MainWindow()
         {
@@ -648,6 +648,11 @@ namespace Paint
         private void zoomInButton_Click(object sender, RoutedEventArgs e)
         {
             Command.executeCommand(new ZoomCommand(this, ZoomType.ZOOM_OUT));
+        }
+
+        private void uiZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            System.Diagnostics.Debug.WriteLine(zoomRatio);
         }
     }
 }
