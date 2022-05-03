@@ -22,6 +22,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using Newtonsoft;
 using System.Diagnostics;
+using Paint.AdvancedFeature;
 
 namespace Paint
 {
@@ -34,12 +35,11 @@ namespace Paint
         bool _isDrawing = false;
         bool _isSaved = false;
         string _currentType = "";
-        IShapeEntity _preview;
+        public IShapeEntity _preview;
         Point _start;
         Point _newStartPoint;
-        List<IShapeEntity> _drawnShapes = new List<IShapeEntity>();
+        public List<IShapeEntity> _drawnShapes = new List<IShapeEntity>();
         List<IShapeEntity> allShape = new List<IShapeEntity>();
-        private Stack<IShapeEntity> _buffer = new Stack<IShapeEntity>();
         string _backgroundImagePath = "";
         IShapeEntity? _choosenShape = null;
         IShapeEntity? _copyShape = null;
@@ -142,7 +142,7 @@ namespace Paint
                 }
                 else
                 {
-                    _drawnShapes.Add((IShapeEntity)_preview.Clone());
+                    Command.executeCommand(new DrawCommand(this));
                 }
 
             }
@@ -487,27 +487,13 @@ namespace Paint
 
         private void undoButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_drawnShapes.Count == 0)
-                return;
-            if (_drawnShapes.Count == 0 && _buffer.Count == 0)
-                return;
-
-            // Push last shape into buffer and remove it from final list, then re-draw canvas
-            int lastIndex = _drawnShapes.Count - 1;
-            _buffer.Push(_drawnShapes[lastIndex]);
-            _drawnShapes.RemoveAt(lastIndex);
-
+            Command.executeCommand(new UndoCommand(this));
             RedrawCanvas();
         }
 
         private void redoButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_buffer.Count == 0)
-                return;
-            if (_drawnShapes.Count == 0 && _buffer.Count == 0)
-                return;
-
-            _drawnShapes.Add(_buffer.Pop());
+            Command.executeCommand(new RedoCommand(this));
             RedrawCanvas();
         }
 
