@@ -23,13 +23,14 @@ using System.Runtime.Serialization;
 using Newtonsoft;
 using System.Diagnostics;
 using Paint.AdvancedFeature;
+using System.ComponentModel;
 
 namespace Paint
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Fluent.RibbonWindow
+    public partial class MainWindow : Fluent.RibbonWindow, INotifyPropertyChanged
     {
         // State
         bool _isDrawing = false;
@@ -44,11 +45,12 @@ namespace Paint
         IShapeEntity? _choosenShape = null;
         IShapeEntity? _copyShape = null;
 
-        int zoomRatio = 100;
+        public int zoomRatio { get; set; } = ZoomCommand.DEFAULT_ZOOM_VALUE;
 
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -631,19 +633,21 @@ namespace Paint
             _newStartPoint = e.GetPosition(canvas);
         }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         private void zoom100Button_Click(object sender, RoutedEventArgs e)
         {
-
+            Command.executeCommand(new ZoomCommand(this, ZoomType.DEFAULT));
         }
 
         private void zoomOutButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Command.executeCommand(new ZoomCommand(this, ZoomType.ZOOM_IN));
         }
 
         private void zoomInButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Command.executeCommand(new ZoomCommand(this, ZoomType.ZOOM_OUT));
         }
     }
 }

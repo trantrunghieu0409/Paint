@@ -15,9 +15,12 @@ namespace Paint.AdvancedFeature
 
         public override bool Execute()
         {
-            saveBackup();
+            saveBackup(); // save current state before doing anything
+            
+            // your action here
             _app._drawnShapes.Add((IShapeEntity)_app._preview.Clone());
-            return true;
+            
+            return true; // this command change the state of canvas so returns true
         }
     }
 }

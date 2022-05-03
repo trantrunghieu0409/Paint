@@ -267,7 +267,13 @@
         <Fluent:StatusBar Grid.Row="2">
             <Fluent:StatusBarItem Title="Item placed on the right side"
                             HorizontalAlignment="Right"
-                            Value="Your value which is also used as content if no content is set." />
+                            >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Zoom Ratio: "/>
+                    <TextBlock Text="{Binding Path=zoomRatio, Mode=TwoWay}"/>
+                    <TextBlock Text="% "/>
+                </StackPanel>
+            </Fluent:StatusBarItem>
         </Fluent:StatusBar>
     </Grid>
 
