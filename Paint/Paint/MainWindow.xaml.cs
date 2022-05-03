@@ -44,6 +44,8 @@ namespace Paint
         IShapeEntity? _choosenShape = null;
         IShapeEntity? _copyShape = null;
 
+        int zoomRatio = 100;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -627,6 +629,21 @@ namespace Paint
         private void border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             _newStartPoint = e.GetPosition(canvas);
+        }
+
+        private void zoom100Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void zoomOutButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void zoomInButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
