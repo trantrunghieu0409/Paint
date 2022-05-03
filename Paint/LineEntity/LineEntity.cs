@@ -43,7 +43,7 @@ namespace LineEntity
         {
             var element = shape as LineEntity;
 
-            Start = element!.Start;
+            Start = startPoint;
             var X = startPoint.X + element.End.X - element.Start.X;
             var Y = startPoint.Y + element.End.Y - element.Start.Y;
             Point endPoint = new Point(X, Y);

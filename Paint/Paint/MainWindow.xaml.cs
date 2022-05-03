@@ -36,6 +36,7 @@ namespace Paint
         string _currentType = "";
         IShapeEntity _preview;
         Point _start;
+        Point _newStartPoint;
         List<IShapeEntity> _drawnShapes = new List<IShapeEntity>();
         List<IShapeEntity> allShape = new List<IShapeEntity>();
         private Stack<IShapeEntity> _buffer = new Stack<IShapeEntity>();
@@ -535,11 +536,11 @@ namespace Paint
 
         private void pasteButton_Click(object sender, RoutedEventArgs e)
         {
-            var startPoint = Mouse.GetPosition(canvas);
             if(_copyShape != null)
             {
-                _copyShape.pasteShape(startPoint, _copyShape);
-                _drawnShapes.Add(_copyShape);
+                IShapeEntity pasteShape = (IShapeEntity)_copyShape.Clone();
+                pasteShape.pasteShape(_newStartPoint, _copyShape);
+                _drawnShapes.Add(pasteShape);
             }
 
             RedrawCanvas();
@@ -629,6 +630,11 @@ namespace Paint
         private void btnBasicRed_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _newStartPoint = e.GetPosition(canvas);
         }
     }
 }

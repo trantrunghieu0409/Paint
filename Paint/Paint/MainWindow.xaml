@@ -61,12 +61,6 @@
                             <Image Source="Images/redo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                         </Fluent:Button.LargeIcon>
                     </Fluent:Button>
-
-                    <Fluent:Button Name="Delete" Header="Delete" Padding="4,4,4,0" Click="Delete_Click">
-                        <Fluent:Button.LargeIcon>
-                            <Image Source="Images/delete.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                        </Fluent:Button.LargeIcon>
-                    </Fluent:Button>
                 </Fluent:RibbonGroupBox>
 
                 <!--Shapes-->
@@ -219,16 +213,24 @@
         <Grid>
             <Canvas x:Name="canvas" Background="White" Focusable="False" Width="1000" Height="310" >
             </Canvas>
-            <Border Name="border" Background="Transparent" MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" MouseUp="Border_MouseUp">
+            <Border Name="border" Background="Transparent" MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" MouseUp="Border_MouseUp" MouseRightButtonDown="border_MouseRightButtonDown">
                 <Border.ContextMenu>
-                    <ContextMenu Background="Red">
+                    <ContextMenu Background="White">
                         <MenuItem Header="Delete" Foreground="Black" Click="Delete_Click">
-
+                            <MenuItem.Icon>
+                                <Image Source="Images/delete.png"/>
+                            </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Copy" Click="copyButton_Click">
-                            
+                        <MenuItem Header="Copy" Foreground="Black" Click="copyButton_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Images/copy.png"/>
+                            </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Paste" Click="pasteButton_Click"></MenuItem>
+                        <MenuItem Header="Paste" Foreground="Black" Click="pasteButton_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Images/paste.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </ContextMenu>
                 </Border.ContextMenu>
             </Border>

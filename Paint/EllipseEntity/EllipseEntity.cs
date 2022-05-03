@@ -36,9 +36,9 @@ namespace EllipseEntity
         public void pasteShape(Point startPoint, IShapeEntity shape)
         {
             var element = shape as EllipseEntity;
-            
-            TopLeft = element!.TopLeft;
-            var X = startPoint.X + Math.Abs(element.RightBottom.X - element.TopLeft.X);
+
+            TopLeft = startPoint;
+            var X = startPoint.X + Math.Abs(element!.RightBottom.X - element.TopLeft.X);
             var Y = startPoint.Y + Math.Abs(element.RightBottom.Y - element.TopLeft.Y);
             Point endPoint = new Point(X, Y);
             RightBottom = endPoint;
