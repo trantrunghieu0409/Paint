@@ -15,5 +15,8 @@ namespace IContract
 
         void HandleStart(Point point);
         void HandleEnd(Point point);
+
+        bool isHovering(double x, double y);
+        void pasteShape(Point startPoint, IShapeEntity shape);
     }
 }

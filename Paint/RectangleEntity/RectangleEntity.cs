@@ -30,5 +30,20 @@ namespace RectangleEntity
         {
             return MemberwiseClone();
         }
+        public bool isHovering(double x, double y)
+        {
+            return Util.isBetween(x, TopLeft.X, RightBottom.X) && Util.isBetween(y, TopLeft.Y, RightBottom.Y);
+        }
+
+        public void pasteShape(Point startPoint, IShapeEntity shape)
+        {
+            var element = shape as RectangleEntity;
+
+            TopLeft = element!.TopLeft;
+            var X = startPoint.X + Math.Abs(element.RightBottom.X - element.TopLeft.X);
+            var Y = startPoint.Y + Math.Abs(element.RightBottom.Y - element.TopLeft.Y);
+            Point endPoint = new Point(X, Y);
+            RightBottom = endPoint;
+        }
     }
 }

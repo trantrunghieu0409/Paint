@@ -22,8 +22,8 @@
         </Style>
     </Fluent:RibbonWindow.Resources>
     <StackPanel Name="actionsStackPanel">
-            <Fluent:Ribbon>
-                <!--Backstage-->
+        <Fluent:Ribbon>
+            <!--Backstage-->
                 <Fluent:Ribbon.Menu>
                     <Fluent:ApplicationMenu Header="File">
                         <Fluent:MenuItem Header="New" Icon="Images/new_file.png" Name="createNewButton" Click="createNewButton_Click"
@@ -43,47 +43,33 @@
                 <!--Tabs-->
                 <Fluent:RibbonTabItem Header="Home">
                     <!--Tools-->
-                    <Fluent:RibbonGroupBox Header="Tools">
-                        <Fluent:Button Name="EditMode" Header="Draw Mode" Padding="4,4,4,0" Click="EditMode_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/edit.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
+                <Fluent:RibbonGroupBox Header="Tools">
+                    <Fluent:Button Name="EditMode" Header="Draw Mode" Padding="4,4,4,0" Click="EditMode_Click">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/edit.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
 
-                        <Fluent:Button Name="undoButton" Header="Undo" Padding="4,4,4,0" Click="undoButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/undo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
+                    <Fluent:Button Name="undoButton" Header="Undo" Padding="4,4,4,0" Click="undoButton_Click">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/undo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
 
-                        <Fluent:Button Name="redoButton" Header="Redo" Padding="4,4,4,0" Click="redoButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/redo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
+                    <Fluent:Button Name="redoButton" Header="Redo" Padding="4,4,4,0" Click="redoButton_Click">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/redo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
 
-                        <Fluent:Button Name="Delete" Header="Delete" Padding="4,4,4,0" Click="Delete_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/delete.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-                    </Fluent:RibbonGroupBox>
-                    <!--Clipboard-->
-                    <Fluent:RibbonGroupBox Header="Clipboard">
-                        <Fluent:Button Name="pasteButton" Header="Paste" Padding="4,4,4,0" Click="pasteButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
+                    <Fluent:Button Name="Delete" Header="Delete" Padding="4,4,4,0" Click="Delete_Click">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/delete.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                </Fluent:RibbonGroupBox>
 
-                        <Fluent:Button Name="copyButton" Header="Copy" Padding="4,4,4,0" Click="copyButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-                    </Fluent:RibbonGroupBox>
-
-                    <!--Shapes-->
+                <!--Shapes-->
                     <Fluent:RibbonGroupBox Header="Shapes">
                         <!--Add shapes' icon here-->
                         <ListView Name="iconListView" Width="200" Height="60" Margin="8,8,8,0" SelectionChanged="iconListView_SelectionChanged"
@@ -230,11 +216,22 @@
                     </Fluent:RibbonGroupBox>
                 </Fluent:RibbonTabItem>
             </Fluent:Ribbon>
-            <Grid>
-                <Canvas x:Name="canvas" Background="White" Focusable="False" Width="1000" Height="310" >
-                </Canvas>
-                <Border Name="border" Background="Transparent" MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" MouseUp="Border_MouseUp">
-                </Border>
+        <Grid>
+            <Canvas x:Name="canvas" Background="White" Focusable="False" Width="1000" Height="310" >
+            </Canvas>
+            <Border Name="border" Background="Transparent" MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" MouseUp="Border_MouseUp">
+                <Border.ContextMenu>
+                    <ContextMenu Background="Red">
+                        <MenuItem Header="Delete" Foreground="Black" Click="Delete_Click">
+
+                        </MenuItem>
+                        <MenuItem Header="Copy" Click="copyButton_Click">
+                            
+                        </MenuItem>
+                        <MenuItem Header="Paste" Click="pasteButton_Click"></MenuItem>
+                    </ContextMenu>
+                </Border.ContextMenu>
+            </Border>
             </Grid>
         </StackPanel>
 </Fluent:RibbonWindow>

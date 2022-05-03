@@ -33,5 +33,21 @@ namespace LineEntity
         {
             Start = point;
         }
+
+        public bool isHovering(double x, double y)
+        {
+            return Util.isBetween(x, Start.X, End.X) && Util.isBetween(y, Start.Y, End.Y);
+        }
+
+        public void pasteShape(Point startPoint, IShapeEntity shape)
+        {
+            var element = shape as LineEntity;
+
+            Start = element!.Start;
+            var X = startPoint.X + element.End.X - element.Start.X;
+            var Y = startPoint.Y + element.End.Y - element.Start.Y;
+            Point endPoint = new Point(X, Y);
+            End = endPoint;
+        }
     }
 }

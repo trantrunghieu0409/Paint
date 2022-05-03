@@ -21,6 +21,7 @@ using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using Newtonsoft;
+using System.Diagnostics;
 
 namespace Paint
 {
@@ -39,6 +40,8 @@ namespace Paint
         List<IShapeEntity> allShape = new List<IShapeEntity>();
         private Stack<IShapeEntity> _buffer = new Stack<IShapeEntity>();
         string _backgroundImagePath = "";
+        IShapeEntity? _choosenShape = null;
+        IShapeEntity? _copyShape = null;
 
         public MainWindow()
         {
@@ -81,10 +84,13 @@ namespace Paint
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            _isDrawing = true;
-            _start = e.GetPosition(canvas);
+            if(e.ChangedButton == MouseButton.Left)
+            {
+                _isDrawing = true;
+                _start = e.GetPosition(canvas);
 
-            _preview.HandleStart(_start);
+                _preview.HandleStart(_start);
+            }
         }
 
         private void Border_MouseMove(object sender, MouseEventArgs e)
@@ -114,13 +120,31 @@ namespace Paint
 
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            _isDrawing = false;
+            if(e.ChangedButton == MouseButton.Left)
+            {
+                _isDrawing = false;
 
-            var end = e.GetPosition(canvas); // Điểm kết thúc
+                var end = e.GetPosition(canvas); // Điểm kết thúc
 
-            _preview.HandleEnd(end);
+                _preview.HandleEnd(end);
 
-            _drawnShapes.Add((IShapeEntity)_preview.Clone());
+                if(Math.Abs(_start.X - end.X) < 2 && Math.Abs(_start.Y - end.Y) < 2)
+                {
+                    Debug.WriteLine("Small");
+                    foreach(var item in _drawnShapes)
+                    {
+                        if(item.isHovering(_start.X, _start.Y))
+                        {
+                            _choosenShape = item;
+                        }
+                    }
+                }
+                else
+                {
+                    _drawnShapes.Add((IShapeEntity)_preview.Clone());
+                }
+
+            }
         }
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
@@ -500,12 +524,25 @@ namespace Paint
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-
+            if(_choosenShape != null)
+            {
+                Debug.WriteLine("Here");
+                _drawnShapes.Remove(_choosenShape);
+                _choosenShape = null;
+                RedrawCanvas();
+            }
         }
 
         private void pasteButton_Click(object sender, RoutedEventArgs e)
         {
+            var startPoint = Mouse.GetPosition(canvas);
+            if(_copyShape != null)
+            {
+                _copyShape.pasteShape(startPoint, _copyShape);
+                _drawnShapes.Add(_copyShape);
+            }
 
+            RedrawCanvas();
         }
 
         private void iconListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -577,7 +614,11 @@ namespace Paint
 
         private void copyButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if(_choosenShape != null)
+            {
+                Debug.WriteLine("Here");
+                _copyShape = (IShapeEntity)_choosenShape.Clone();
+            }
         }
 
         private void btnBasicGray_Click(object sender, RoutedEventArgs e)
