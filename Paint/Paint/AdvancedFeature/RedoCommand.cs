@@ -18,8 +18,9 @@ namespace Paint.AdvancedFeature
             Command? c = _redoHistory.pop();
             if (c != null)
             {
+                saveBackup();
+                _undoHistory.push(this);
                 _app._drawnShapes = new List<IShapeEntity>(c._backup);
-                _undoHistory.push(c);
             }
             return false;
         }

@@ -70,7 +70,7 @@ namespace Paint
                 _currentType = key;
                 _preview = (shape.Clone() as IShapeEntity)!;
             }
-
+            redoButton.IsEnabled = undoButton.IsEnabled = false;
         }
 
         // Đổi lựa chọn
@@ -143,8 +143,9 @@ namespace Paint
                 else
                 {
                     Command.executeCommand(new DrawCommand(this));
+                    undoButton.IsEnabled = true;
+                    redoButton.IsEnabled = false;
                 }
-
             }
         }
 
@@ -501,6 +502,10 @@ namespace Paint
         {
             canvas.Children.Clear();
             Console.WriteLine(_drawnShapes.Count);
+            
+            redoButton.IsEnabled = Command._redoHistory.count() > 0;
+            undoButton.IsEnabled = Command._undoHistory.count() > 0 && _drawnShapes.Count > 0;
+            
             foreach (var shape in (_drawnShapes))
             {
                 var painter = Config.painterPrototypes[shape.Name];
@@ -594,6 +599,16 @@ namespace Paint
 
         }
 
+        private void btnBasicGray_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnBasicRed_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void editColorButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -608,15 +623,6 @@ namespace Paint
             }
         }
 
-        private void btnBasicGray_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnBasicRed_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {

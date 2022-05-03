@@ -11,8 +11,8 @@ namespace Paint.AdvancedFeature
     {
         protected MainWindow _app;
         public List<IShapeEntity> _backup;
-        protected static CommandHistory _undoHistory = new CommandHistory();
-        protected static CommandHistory _redoHistory = new CommandHistory();
+        public static CommandHistory _undoHistory = new CommandHistory();
+        public static CommandHistory _redoHistory = new CommandHistory();
 
         public Command(MainWindow app)
         {

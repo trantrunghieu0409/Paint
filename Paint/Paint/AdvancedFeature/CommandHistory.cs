@@ -26,5 +26,10 @@ namespace Paint.AdvancedFeature
         {
             _history.Clear();
         }
+
+        public int count()
+        {
+            return _history.Count;
+        }
     }
 }
