@@ -19,6 +19,8 @@ namespace Paint.AdvancedFeature
             this._app = app;
         }
 
+        // return true if this function change the state of canvas (i.e cut, paste, add/edit/delete drawing)
+        // else return false (i.e copy, selection)
         public abstract bool Execute();
 
         public static void executeCommand(Command c)
