@@ -38,12 +38,12 @@ namespace Paint
         string _currentType = "";
         public IShapeEntity _preview;
         Point _start;
-        Point _newStartPoint;
+        public Point _newStartPoint;
         public List<IShapeEntity> _drawnShapes = new List<IShapeEntity>();
         List<IShapeEntity> allShape = new List<IShapeEntity>();
         string _backgroundImagePath = "";
-        IShapeEntity? _choosenShape = null;
-        IShapeEntity? _copyShape = null;
+        public IShapeEntity? _choosenShape = null;
+        public IShapeEntity? _clipboard = null;
 
         public float zoomRatio { get; set; } = ZoomCommand.DEFAULT_ZOOM_VALUE;
 
@@ -448,7 +448,6 @@ namespace Paint
             dashComboBox.SelectedIndex = 0;
             sizeComboBox.SelectedIndex = 0;
 
-            EditMode.Header = "Draw Mode";
             canvas.Children.Clear();
             canvas.Background = new SolidColorBrush(Colors.White);
         }
@@ -485,11 +484,6 @@ namespace Paint
             _isSaved = true;
         }
 
-        private void EditMode_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void undoButton_Click(object sender, RoutedEventArgs e)
         {
             Command.executeCommand(new UndoCommand(this));
@@ -520,24 +514,14 @@ namespace Paint
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if(_choosenShape != null)
-            {
-                Debug.WriteLine("Here");
-                _drawnShapes.Remove(_choosenShape);
-                _choosenShape = null;
-                RedrawCanvas();
-            }
+
+           Command.executeCommand(new DeleteCommand(this));
+           RedrawCanvas();
         }
 
         private void pasteButton_Click(object sender, RoutedEventArgs e)
         {
-            if(_copyShape != null)
-            {
-                IShapeEntity pasteShape = (IShapeEntity)_copyShape.Clone();
-                pasteShape.pasteShape(_newStartPoint, _copyShape);
-                _drawnShapes.Add(pasteShape);
-            }
-
+            Command.executeCommand(new PasteCommand(this));
             RedrawCanvas();
         }
 
@@ -620,11 +604,7 @@ namespace Paint
 
         private void copyButton_Click(object sender, RoutedEventArgs e)
         {
-            if(_choosenShape != null)
-            {
-                Debug.WriteLine("Here");
-                _copyShape = (IShapeEntity)_choosenShape.Clone();
-            }
+            Command.executeCommand(new CopyCommand(this));
         }
 
 
