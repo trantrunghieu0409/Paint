@@ -256,6 +256,7 @@
                     <Canvas x:Name="canvas" Background="White" Focusable="False" 
                         Width="{Binding ElementName=ScrollViewer, Path=ActualWidth}"
                         Height="{Binding ElementName=ScrollViewer, Path=ActualHeight}">
+                        
                     </Canvas>
                     <Border Name="border" Background="Transparent" 
                         MouseDown="Border_MouseDown" MouseMove="Border_MouseMove" PreviewMouseUp="Border_MouseUp" 
@@ -277,7 +278,12 @@
                                     <Image Source="Images/paste.png"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-                        </ContextMenu>
+                                <MenuItem Header="Insert image" Foreground="Black" Click="insertItem_Click" MouseUp="MenuItem_MouseUp">
+                                    <MenuItem.Icon>
+                                        <Image Source="Images/paste.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
                     </Border.ContextMenu>
                     </Border>
                 </Grid>
