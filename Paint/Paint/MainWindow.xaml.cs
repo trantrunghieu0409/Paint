@@ -53,7 +53,7 @@ namespace Paint
 
         private static int _currentThickness = 1;
         private static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
-        private static DoubleCollection _currentDash = null;
+        private static DoubleCollection? _currentDash = null;
 
         bool _isFilling = false;
 
