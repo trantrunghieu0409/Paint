@@ -18,9 +18,8 @@ namespace Paint.AdvancedFeature
             if(_app._choosenShape != null)
             {
                 _app._clipboard = (IShapeEntity)_app._choosenShape.Clone();
-                return false;
             }
-            return true;
+            return false;
         }
     }
 }

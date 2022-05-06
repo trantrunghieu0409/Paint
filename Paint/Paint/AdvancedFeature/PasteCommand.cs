@@ -18,6 +18,7 @@ namespace Paint.AdvancedFeature
             saveBackup();
             if(_app._clipboard != null)
             {
+                saveBackup();
                 IShapeEntity pasteShape = (IShapeEntity)_app._clipboard.Clone();
                 pasteShape.pasteShape(_app._newStartPoint, _app._clipboard);
                 _app._drawnShapes.Add(pasteShape);
