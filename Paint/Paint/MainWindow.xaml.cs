@@ -54,6 +54,7 @@ namespace Paint
         public SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
         public DoubleCollection _currentDash = null;
 
+
         bool _isFilling = false;
 
         public MainWindow()
