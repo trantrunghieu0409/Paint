@@ -170,6 +170,7 @@ namespace Paint
                                 RedrawCanvas();
 
                                 _isFilling = false;
+                                this.Cursor = Cursors.Arrow;
                             }
                         }
                     }
@@ -278,7 +279,6 @@ namespace Paint
 
         private void openFileButton_Click(object sender, RoutedEventArgs e)
         {
-            // New Official
             var dialog = new System.Windows.Forms.OpenFileDialog();
 
             dialog.Filter = "DAT File (.dat)|*.dat";
@@ -338,6 +338,19 @@ namespace Paint
                         shapeEntity.HandleDoubleCollection(DoubleCollection.Parse(dash));
                     }
 
+                    if (dict.ContainsKey("Background"))
+                    {
+                        var backgroundColor = dict["Background"];
+                        if (backgroundColor.CompareTo("null") == 0)
+                        {
+                            shapeEntity.HandleBackground(null);
+                        }
+                        else
+                        {
+                            shapeEntity.HandleBackground(new SolidColorBrush((Color)ColorConverter.ConvertFromString(backgroundColor)));
+                        }
+                    }
+
                     containers.Add(shapeEntity);
                 }
             }
@@ -352,7 +365,6 @@ namespace Paint
                 canvas.Children.Add(item);
             }
 
-            // Official
             //var dialog = new System.Windows.Forms.OpenFileDialog();
 
             //dialog.Filter = "DAT File (.dat)|*.dat";
@@ -403,7 +415,6 @@ namespace Paint
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
-            // New official
             var dialog = new System.Windows.Forms.SaveFileDialog();
 
             dialog.Filter = "DAT File (.dat)|*.dat";
@@ -435,8 +446,6 @@ namespace Paint
                 _isSaved = true;
             }
 
-
-            // Official
             //var settings = new JsonSerializerSettings()
             //{
             //   TypeNameHandling = TypeNameHandling.Objects
@@ -480,6 +489,15 @@ namespace Paint
                         value = "null";
                     }
                 }
+                else if (prp.Name.CompareTo("Background") == 0)
+                {
+                    if (value == null)
+                    {
+                        value = "null";
+                    }
+                }
+
+
                 dict.Add(prp.Name, value);
             }
             return dict;
@@ -732,6 +750,7 @@ namespace Paint
         private void fillButton_Click(object sender, RoutedEventArgs e)
         {
             _isFilling = true;
+            this.Cursor = Cursors.Hand;
         }
 
         private void insertItem_Click(object sender, RoutedEventArgs e)
