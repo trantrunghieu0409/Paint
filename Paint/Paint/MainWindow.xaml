@@ -280,7 +280,7 @@
                             </MenuItem>
                                 <MenuItem Header="Insert image" Foreground="Black" Click="insertItem_Click" MouseUp="MenuItem_MouseUp">
                                     <MenuItem.Icon>
-                                        <Image Source="Images/paste.png"/>
+                                        <Image Source="Images/insert.png"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>
