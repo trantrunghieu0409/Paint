@@ -555,10 +555,10 @@ namespace Paint
             }
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private void Cut_Click(object sender, RoutedEventArgs e)
         {
 
-           Command.executeCommand(new DeleteCommand(this));
+           Command.executeCommand(new CutCommand(this));
            RedrawCanvas();
         }
 
