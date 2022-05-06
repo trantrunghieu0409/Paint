@@ -280,196 +280,82 @@ namespace Paint
         private void openFileButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.OpenFileDialog();
-
-            dialog.Filter = "DAT File (.dat)|*.dat";
-
-            var containers = new List<IShapeEntity>();
+            dialog.Filter = "PNG (*.png)|*.png| JPEG (*.jpeg)|*.jpeg| BMP (*.bmp)|*.bmp";
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                _drawnShapes.Clear();
-                canvas.Children.Clear();
-
                 string path = dialog.FileName;
 
-                string[] src = File.ReadAllLines(path);
-                string content = "";
-                foreach (string line in src)
-                    content += line;
+                _backgroundImagePath = path;
 
-                _drawnShapes.Clear();
-                canvas.Children.Clear();
-
-                string[] shapes = content.Split("[]".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                foreach (string shape in shapes)
-                {
-                    string[] properties = shape.Split(';', StringSplitOptions.RemoveEmptyEntries);
-                    Dictionary<string, string> dict = new Dictionary<string, string>();
-                    foreach (var property in properties)
-                    {
-                        string[] pairs = property.Split('@', StringSplitOptions.RemoveEmptyEntries);
-                        dict.Add(pairs[0].Trim(), pairs[1].Trim());
-                    }
-
-                    var start = dict.ElementAt(0);
-                    string[] startCoords = start.Value.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    Point startPoint = new Point(double.Parse(startCoords[0]), double.Parse(startCoords[1]));
-
-                    var end = dict.ElementAt(1);
-                    string[] endCoords = end.Value.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    Point endPoint = new Point(double.Parse(endCoords[0]), double.Parse(endCoords[1]));
-
-                    var color = (Color)ColorConverter.ConvertFromString(dict["Brush"]);
-                    var brush = new SolidColorBrush(color);
-
-                    IShapeEntity shapeEntity = (Config.shapesPrototypes[dict["Name"]].Clone() as IShapeEntity)!;
-                    shapeEntity.HandleStart(startPoint);
-                    shapeEntity.HandleEnd(endPoint);
-                    shapeEntity.HandleSolidColorBrush(brush);
-                    shapeEntity.HandleThickness(int.Parse(dict["Thickness"]));
-
-                    var dash = dict["StrokeDash"];
-                    if (dash.CompareTo("null") == 0)
-                    {
-                        shapeEntity.HandleDoubleCollection(null);
-                    }
-                    else
-                    {
-                        shapeEntity.HandleDoubleCollection(DoubleCollection.Parse(dash));
-                    }
-
-                    if (dict.ContainsKey("Background"))
-                    {
-                        var backgroundColor = dict["Background"];
-                        if (backgroundColor.CompareTo("null") == 0)
-                        {
-                            shapeEntity.HandleBackground(null);
-                        }
-                        else
-                        {
-                            shapeEntity.HandleBackground(new SolidColorBrush((Color)ColorConverter.ConvertFromString(backgroundColor)));
-                        }
-                    }
-
-                    containers.Add(shapeEntity);
-                }
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri(path, UriKind.Absolute));
+                canvas.Background = brush;
             }
-
-            foreach (var item in containers)
-                _drawnShapes.Add(item);
-
-            foreach (var shape in _drawnShapes)
-            {
-                var painter = Config.painterPrototypes[shape.Name];
-                var item = painter.Draw(shape);
-                canvas.Children.Add(item);
-            }
-
-            //var dialog = new System.Windows.Forms.OpenFileDialog();
-
-            //dialog.Filter = "DAT File (.dat)|*.dat";
-
-            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    string path = dialog.FileName;
-
-            //    string[] content = File.ReadAllLines(path);
-
-            //    string background = "";
-            //    string json = content[0];
-            //    if (content.Length > 1)
-            //        background = content[1];
-
-            //    byte[] textAsBytes = System.Convert.FromBase64String(json);
-            //    var src = Encoding.ASCII.GetString(textAsBytes);
-
-            //    var settings = new JsonSerializerSettings()
-            //    {
-            //        TypeNameHandling = TypeNameHandling.Objects
-            //    };
-
-            //    _drawnShapes.Clear();
-            //    _backgroundImagePath = background;
-            //    canvas.Children.Clear();
-
-            //    List<IShapeEntity> containers = JsonConvert.DeserializeObject<List<IShapeEntity>>(src, settings);
-
-            //    foreach (var item in containers)
-            //        _drawnShapes.Add(item);
-
-            //    if (_backgroundImagePath.Length != 0)
-            //    {
-            //        ImageBrush brush = new ImageBrush();
-            //        brush.ImageSource = new BitmapImage(new Uri(_backgroundImagePath, UriKind.Absolute));
-            //        canvas.Background = brush;
-            //    }
-            //}
-
-            //foreach (var shape in _drawnShapes)
-            //{
-            //    var painter = Config.painterPrototypes[shape.Name];
-            //    var item = painter.Draw(shape);
-            //    canvas.Children.Add(item);
-            //}
         }
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.SaveFileDialog();
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = "United"; // Default file name
+            dialog.DefaultExt = ".png"; // Default file extension
+            dialog.Filter = "PNG (.png)|*.png"; // Filter files by extension
 
-            dialog.Filter = "DAT File (.dat)|*.dat";
+            // Show save file dialog box
+            bool? result = dialog.ShowDialog();
 
-            string content = "";
-
-            for (int index = 0; index < _drawnShapes.Count; index++)
+            // Process save file dialog box results
+            if (result == true)
             {
-                var dict = DictionaryFromType(_drawnShapes.ElementAt(index));
+                // Save document
+                string filename = dialog.FileName;
+                string saveFileName = System.IO.Path.GetFullPath(filename);
 
-                content += "[";
-                for (int count = 0; count < dict.Count; count++)
-                {
-                    var element = dict.ElementAt(count);
-                    var Key = element.Key;
-                    var Value = element.Value;
-                    content += Key + "@" + Value;
 
-                    if (count != dict.Count - 1)
-                        content += ";";
-                }
-                content += "]";
+                this.ExportToPng(saveFileName, canvas);
             }
 
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        }
+
+        public void ExportToPng(string path, Canvas surface)
+        {
+            if (path == null) return;
+
+            // Save current canvas transform
+            Transform transform = surface.LayoutTransform;
+            // reset current transform (in case it is scaled or rotated)
+            surface.LayoutTransform = null;
+
+            // Get the size of canvas
+            Size size = new Size(surface.Width, surface.Height);
+            // Measure and arrange the surface
+            // VERY IMPORTANT
+            surface.Measure(size);
+            surface.Arrange(new Rect(size));
+
+            // Create a render bitmap and push the surface to it
+            RenderTargetBitmap renderBitmap =
+              new RenderTargetBitmap(
+                (int)size.Width,
+                (int)size.Height,
+                96d,
+                96d,
+                PixelFormats.Pbgra32);
+            renderBitmap.Render(surface);
+
+            // Create a file stream for saving image
+            using (FileStream outStream = new FileStream(path.LocalPath, FileMode.Create))
             {
-                string path = dialog.FileName;
-                File.WriteAllText(path, content);
-                _isSaved = true;
+                // Use png encoder for our data
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                // push the rendered bitmap to it
+                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+                // save the data to the stream
+                encoder.Save(outStream);
             }
 
-            //var settings = new JsonSerializerSettings()
-            //{
-            //   TypeNameHandling = TypeNameHandling.Objects
-            //};
-
-            //var serializedShapeList = JsonConvert.SerializeObject(_drawnShapes, settings);
-
-            //StringBuilder builder = new StringBuilder();
-            //builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
-            //string content = builder.ToString();
-
-            //byte[] bytes = Encoding.ASCII.GetBytes(content);
-            //string data = Convert.ToBase64String(bytes);
-
-            //var dialog = new System.Windows.Forms.SaveFileDialog();
-
-            //dialog.Filter = "DAT File (.dat)|*.dat";
-
-            //if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    string path = dialog.FileName;
-            //    File.WriteAllText(path, data);
-            //    _isSaved = true;
-            //}
+            // Restore previously saved layout
+            surface.LayoutTransform = transform;
         }
 
         public Dictionary<string, object> DictionaryFromType(object atype)
