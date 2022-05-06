@@ -344,7 +344,7 @@ namespace Paint
             renderBitmap.Render(surface);
 
             // Create a file stream for saving image
-            using (FileStream outStream = new FileStream(path, FileMode.Create))
+            using (FileStream outStream = new FileStream(path.LocalPath, FileMode.Create))
             {
                 // Use png encoder for our data
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
