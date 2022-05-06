@@ -48,12 +48,11 @@ namespace Paint
         public List<Image> _images = new List<Image>();
         public Point tmp_position = new Point();
         
-
         public float zoomRatio { get; set; } = ZoomCommand.DEFAULT_ZOOM_VALUE;
 
-        private static int _currentThickness = 1;
-        private static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
-        private static DoubleCollection _currentDash = null;
+        public int _currentThickness = 1;
+        public SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
+        public DoubleCollection _currentDash = null;
 
         bool _isFilling = false;
 
@@ -165,12 +164,12 @@ namespace Paint
 
                             if (_isFilling == true)
                             {
-                               _choosenShape.HandleBackground(_currentColor);
-
+                                //_choosenShape.HandleBackground(_currentColor);
+                                Command.executeCommand(new FillCommand(this));
                                 RedrawCanvas();
-
+                                
                                 _isFilling = false;
-                                this.Cursor = Cursors.Arrow;
+                                //this.Cursor = Cursors.Arrow;
                             }
                         }
                     }
@@ -750,8 +749,8 @@ namespace Paint
 
         private void fillButton_Click(object sender, RoutedEventArgs e)
         {
-            _isFilling = true;
-            this.Cursor = Cursors.Hand;
+            _isFilling = !_isFilling;
+            //this.Cursor = Cursors.Hand;
         }
 
         private void insertItem_Click(object sender, RoutedEventArgs e)
