@@ -256,8 +256,8 @@
                 </Viewbox.LayoutTransform>
                 <Grid>
                     <Canvas x:Name="canvas" Background="White" Focusable="False" 
-                        Width="{Binding ElementName=ScrollViewer, Path=ActualWidth}"
-                        Height="{Binding ElementName=ScrollViewer, Path=ActualHeight}">
+                        Width="3000"
+                        Height="3000">
                         
                     </Canvas>
                     <Border Name="border" Background="Transparent" 

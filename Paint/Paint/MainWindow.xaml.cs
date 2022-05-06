@@ -165,12 +165,10 @@ namespace Paint
 
                             if (_isFilling == true)
                             {
-                                //_choosenShape.HandleBackground(_currentColor);
                                 Command.executeCommand(new FillCommand(this));
                                 RedrawCanvas();
                                 
                                 _isFilling = false;
-                                //this.Cursor = Cursors.Arrow;
                             }
                         }
                     }
@@ -751,7 +749,6 @@ namespace Paint
         private void fillButton_Click(object sender, RoutedEventArgs e)
         {
             _isFilling = !_isFilling;
-            //this.Cursor = Cursors.Hand;
         }
 
         private void insertItem_Click(object sender, RoutedEventArgs e)
