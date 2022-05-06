@@ -34,7 +34,11 @@ namespace Paint.AdvancedFeature
 
         public void saveBackup()
         {
-            _backup = new List<IShapeEntity>(_app._drawnShapes);
+            _backup = new List<IShapeEntity>();
+            foreach (var shape in _app._drawnShapes)
+            {
+                _backup.Add((IShapeEntity)shape.Clone());
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ namespace ImageEntity
 
         public void HandleSolidColorBrush(SolidColorBrush brush)
         {
-            Brush = brush;
+            Brush = brush.Clone();
         }
         public void HandleThickness(int thickness)
         {
@@ -47,12 +47,12 @@ namespace ImageEntity
         }
         public void HandleDoubleCollection(DoubleCollection dash)
         {
-            StrokeDash = dash;
+            StrokeDash = dash.Clone();
         }
 
         public void HandleBackground(SolidColorBrush background)
         {
-            Background = background;
+            Background = background.Clone();
         }
 
         public object Clone()
