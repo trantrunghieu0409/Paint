@@ -31,15 +31,37 @@ Nếu sử dụng **Point** thì cần include System.Windows, ***không include
 
 ## Các chức năng đã làm được
 
-** 1. Dynamically load all graphic objects that can be drawn from external DLL files **
+**1. Dynamically load all graphic objects that can be drawn from external DLL files**
 
-** 2. The user can choose which object to draw **
+**2. The user can choose which object to draw**
 
-** 3. The user can see the preview of the object they want to draw **
+**3. The user can see the preview of the object they want to draw**
 
-** 4. The user can finish the drawing preview and their change becomes permanent with previously drawn objects **
+**4. The user can finish the drawing preview and their change becomes permanent with previously drawn objects**
 
-** 5. The list of drawn objects can be saved and loaded again for continuing later **
+**5. The list of drawn objects can be saved and loaded again for continuing later**
 
-** 6. Save and load all drawn objects as an image in bmp/png/jpg format (rasterization). **
+**6. Save and load all drawn objects as an image in bmp/png/jpg format (rasterization).**
+
+**7. Allow the user to change the color, pen width, stroke type (dash, dot, dash dot dot..._**
+
+**8. Adding image to the canvas**
+
+**9. Zooming**
+
+**10. Cut / Copy / Paste**
+
+**11. Undo, Redo**
+
+**12. Fill color by boundaries**
+
+**13. Using command pattern**
+
+## Điểm đề nghị 
+
+**13 điểm**
+
+## Link video demo
+
+
 
