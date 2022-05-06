@@ -49,11 +49,7 @@ namespace EllipseEntity
 
         public object Clone()
         {
-            EllipseEntity cloneShape = (EllipseEntity)this.MemberwiseClone();
-            if (Brush != null) cloneShape.Brush = Brush.Clone();
-            if (Background != null) cloneShape.Background = Background.Clone();
-            if (StrokeDash != null) cloneShape.StrokeDash = StrokeDash.Clone();
-            return cloneShape;
+            return MemberwiseClone();
         }
 
         public bool isHovering(double x, double y)

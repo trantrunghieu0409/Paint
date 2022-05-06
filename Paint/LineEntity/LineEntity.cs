@@ -26,10 +26,7 @@ namespace LineEntity
 
         public object Clone()
         {
-            LineEntity cloneShape = (LineEntity)this.MemberwiseClone();
-            if (Brush != null) cloneShape.Brush = Brush.Clone();
-            if (StrokeDash != null) cloneShape.StrokeDash = StrokeDash.Clone();
-            return cloneShape;
+            return MemberwiseClone();
         }
 
         public void HandleEnd(Point point)
