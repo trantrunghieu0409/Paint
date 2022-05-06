@@ -20,6 +20,7 @@ namespace RectangleEntity
         public BitmapImage Icon => new BitmapImage(new Uri("Images/rectangle.png", UriKind.Relative));
 
         public SolidColorBrush Brush { get; set; }
+        public SolidColorBrush Background { get; set; }
         public int Thickness { get; set; }
         public DoubleCollection StrokeDash { get; set; }
 
@@ -43,6 +44,11 @@ namespace RectangleEntity
         public void HandleDoubleCollection(DoubleCollection dash)
         {
             StrokeDash = dash;
+        }
+
+        public void HandleBackground(SolidColorBrush background)
+        {
+            Background = background;
         }
 
         public object Clone()

@@ -18,6 +18,7 @@ namespace EllipseEntity
         BitmapImage IShapeEntity.Icon => throw new NotImplementedException();
 
         public SolidColorBrush Brush { get; set; }
+        public SolidColorBrush Background { get; set; }
         public int Thickness { get; set; }
         public DoubleCollection StrokeDash { get; set; }
 
@@ -40,6 +41,10 @@ namespace EllipseEntity
         public void HandleDoubleCollection(DoubleCollection dash)
         {
             StrokeDash = dash;
+        }
+        public void HandleBackground(SolidColorBrush background)
+        {
+            Background = background;
         }
 
         public object Clone()

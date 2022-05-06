@@ -29,7 +29,8 @@ namespace RectangleEntity
                 //Stroke = new System.Windows.Media.SolidColorBrush(Colors.Red)
                 StrokeThickness = rectangle.Thickness,
                 Stroke = rectangle.Brush,
-                StrokeDashArray = rectangle.StrokeDash
+                StrokeDashArray = rectangle.StrokeDash,
+                Fill = rectangle.Background
             };
 
             if (rectangle.RightBottom.X > rectangle.TopLeft.X && rectangle.RightBottom.Y > rectangle.TopLeft.Y)

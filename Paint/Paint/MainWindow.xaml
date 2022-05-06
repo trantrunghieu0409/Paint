@@ -210,6 +210,16 @@
                     </StackPanel>
 
                 </Fluent:RibbonGroupBox>
+
+                <Fluent:RibbonGroupBox Header="Utilities" Width="215">
+                    <StackPanel Orientation="Horizontal">
+                        <Fluent:Button Name="fillButton" Header="Fill" Click="fillButton_Click" Padding="4,4,4,0">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/fill.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+                    </StackPanel>
+                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
             <!-- View -->

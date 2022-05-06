@@ -29,7 +29,8 @@ namespace EllipseEntity
                 //Stroke = new System.Windows.Media.SolidColorBrush(Colors.Red)
                 StrokeThickness = ellipse.Thickness,
                 Stroke = ellipse.Brush,
-                StrokeDashArray = ellipse.StrokeDash
+                StrokeDashArray = ellipse.StrokeDash,
+                Fill = ellipse.Background
             };
 
             if (ellipse.RightBottom.X > ellipse.TopLeft.X && ellipse.RightBottom.Y > ellipse.TopLeft.Y)

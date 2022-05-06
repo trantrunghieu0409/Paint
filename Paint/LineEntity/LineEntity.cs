@@ -51,6 +51,10 @@ namespace LineEntity
         {
             StrokeDash = dash;
         }
+        public void HandleBackground(SolidColorBrush background)
+        {
+            // do nothing
+        }
 
         public bool isHovering(double x, double y)
         {

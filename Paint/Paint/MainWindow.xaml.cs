@@ -52,6 +52,8 @@ namespace Paint
         private static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
         private static DoubleCollection _currentDash = null;
 
+        bool _isFilling = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -150,6 +152,15 @@ namespace Paint
                         if(item.isHovering(_start.X, _start.Y))
                         {
                             _choosenShape = item;
+
+                            if (_isFilling == true)
+                            {
+                               _choosenShape.HandleBackground(_currentColor);
+
+                                RedrawCanvas();
+
+                                _isFilling = false;
+                            }
                         }
                     }
                 }
@@ -706,6 +717,11 @@ namespace Paint
         private void uiZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             System.Diagnostics.Debug.WriteLine(zoomRatio);
+        }
+
+        private void fillButton_Click(object sender, RoutedEventArgs e)
+        {
+            _isFilling = true;
         }
     }
 }

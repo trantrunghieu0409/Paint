@@ -20,6 +20,7 @@ namespace IContract
         void HandleSolidColorBrush(SolidColorBrush brush);
         void HandleThickness(int thickness);
         void HandleDoubleCollection(DoubleCollection dash);
+        void HandleBackground(SolidColorBrush background);
 
         bool isHovering(double x, double y);
         void pasteShape(Point startPoint, IShapeEntity shape);
