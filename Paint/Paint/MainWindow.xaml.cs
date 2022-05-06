@@ -45,6 +45,9 @@ namespace Paint
         string _backgroundImagePath = "";
         public IShapeEntity? _choosenShape = null;
         public IShapeEntity? _clipboard = null;
+        public List<Image> _images = new List<Image>();
+        public Point tmp_position = new Point();
+        
 
         public float zoomRatio { get; set; } = ZoomCommand.DEFAULT_ZOOM_VALUE;
 
@@ -107,6 +110,8 @@ namespace Paint
 
         private void Border_MouseMove(object sender, MouseEventArgs e)
         {
+            tmp_position = e.GetPosition(canvas);
+
             if (_isDrawing)
             {
                 var end = e.GetPosition(canvas);
@@ -122,6 +127,11 @@ namespace Paint
                     var shape = painter.Draw(item);
 
                     canvas.Children.Add(shape);
+                }
+
+                foreach(var item in _images)
+                {
+                    canvas.Children.Add(item);
                 }
 
                 _preview.HandleSolidColorBrush(_currentColor);
@@ -722,6 +732,38 @@ namespace Paint
         private void fillButton_Click(object sender, RoutedEventArgs e)
         {
             _isFilling = true;
+        }
+
+        private void insertItem_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.OpenFileDialog();
+            dialog.Filter = "PNG (*.png)|*.png| JPEG (*.jpeg)|*.jpeg| BMP (*.bmp)|*.bmp";
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = dialog.FileName;
+
+                _backgroundImagePath = path;
+                
+                Image result1 = new Image();
+                BitmapImage bitmapImage = new BitmapImage(new Uri(path, UriKind.Absolute));//source of image 
+                result1.Source = bitmapImage;
+                
+                result1.Stretch = Stretch.Fill;
+
+                Canvas.SetTop(result1, tmp_position.Y);
+                Canvas.SetLeft(result1, tmp_position.X);
+                _images.Add(result1 as Image);
+
+                
+                canvas.Children.Add(result1);
+                
+            }
+        }
+
+        private void MenuItem_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            
         }
     }
 }
