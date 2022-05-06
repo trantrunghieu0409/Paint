@@ -667,7 +667,12 @@ namespace Paint
 
         private void editColorButton_Click(object sender, RoutedEventArgs e)
         {
+            System.Windows.Forms.ColorDialog colorPicker = new System.Windows.Forms.ColorDialog();
 
+            if (colorPicker.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                _currentColor = new SolidColorBrush(Color.FromRgb(colorPicker.Color.R, colorPicker.Color.G, colorPicker.Color.B));
+            }
         }
 
         private void copyButton_Click(object sender, RoutedEventArgs e)
