@@ -1,5 +1,13 @@
-# Paint
+# Project Paint - Lập trình Windows - 19KTPM1
 
+### Thành viên
+
+|       Họ và tên      |   MSSV   |   Điểm  |   
+|----------------------|:--------:|:-------:|
+| Nguyễn Văn Tấn Phong | 19127646 |	   13   |
+| Trần Trung Hiếu      | 19127641 |	   13   |
+| Lê Quang Tấn Long    | 19127201 |	   13   |
+| Trần Quốc Tuấn       | 19127650 |	   13   |
 
 ## Hướng dẫn chạy lần đầu:
 
@@ -15,3 +23,23 @@
 Lưu ý:
 Nếu sử dụng **Point** thì cần include System.Windows, ***không include System.Drawings nhé*** 
 3. Mỗi lần code tạo mới hoặc thay đổi liên quan đến hình vẽ, rebuild lại project( của hình vẽ đó ) và copy file .dll vào trong Paint ( giống như chạy lần đầu )
+
+## Basic graphic object
+- Line: controlled by two points, the starting point, and the endpoint
+- Rectangle: controlled by two points, the left top point, and the right bottom point
+- Ellipse: controlled by two points, the left top point, and the right bottom point
+
+## Các chức năng đã làm được
+
+** 1. Dynamically load all graphic objects that can be drawn from external DLL files **
+
+** 2. The user can choose which object to draw **
+
+** 3. The user can see the preview of the object they want to draw **
+
+** 4. The user can finish the drawing preview and their change becomes permanent with previously drawn objects **
+
+** 5. The list of drawn objects can be saved and loaded again for continuing later **
+
+** 6. Save and load all drawn objects as an image in bmp/png/jpg format (rasterization). **
+

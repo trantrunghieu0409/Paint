@@ -513,6 +513,7 @@ namespace Paint
             _isDrawing = false;
 
             _drawnShapes.Clear();
+            _images.Clear();
 
             _backgroundImagePath = "";
 
