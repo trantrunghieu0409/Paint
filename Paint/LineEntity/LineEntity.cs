@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace LineEntity
@@ -19,6 +20,10 @@ namespace LineEntity
 
         public BitmapImage Icon => new BitmapImage(new Uri("Images/line.png", UriKind.Relative));
 
+        public SolidColorBrush Brush { get; set; }
+        public int Thickness { get; set; }
+        public DoubleCollection StrokeDash { get; set; }
+
         public object Clone()
         {
             return MemberwiseClone();
@@ -32,6 +37,19 @@ namespace LineEntity
         public void HandleStart(Point point)
         {
             Start = point;
+        }
+
+        public void HandleSolidColorBrush(SolidColorBrush brush)
+        {
+            Brush = brush;
+        }
+        public void HandleThickness(int thickness)
+        {
+            Thickness = thickness;
+        }
+        public void HandleDoubleCollection(DoubleCollection dash)
+        {
+            StrokeDash = dash;
         }
 
         public bool isHovering(double x, double y)

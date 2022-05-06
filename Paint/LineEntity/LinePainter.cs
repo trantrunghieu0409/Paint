@@ -22,8 +22,11 @@ namespace LineEntity
                 Y1 = line.Start.Y,
                 X2 = line.End.X,
                 Y2 = line.End.Y,
-                StrokeThickness = 1,
-                Stroke = new SolidColorBrush(Colors.Black)
+                //StrokeThickness = 1,
+                //Stroke = new SolidColorBrush(Colors.Black)
+                StrokeThickness = line.Thickness,
+                Stroke = line.Brush,
+                StrokeDashArray = line.StrokeDash
             };
 
             return element;

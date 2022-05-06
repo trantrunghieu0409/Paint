@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace IContract
@@ -15,6 +16,10 @@ namespace IContract
 
         void HandleStart(Point point);
         void HandleEnd(Point point);
+
+        void HandleSolidColorBrush(SolidColorBrush brush);
+        void HandleThickness(int thickness);
+        void HandleDoubleCollection(DoubleCollection dash);
 
         bool isHovering(double x, double y);
         void pasteShape(Point startPoint, IShapeEntity shape);

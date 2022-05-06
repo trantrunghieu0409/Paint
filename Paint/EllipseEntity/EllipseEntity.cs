@@ -1,6 +1,7 @@
 using IContract;
 using System;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace EllipseEntity
@@ -16,6 +17,10 @@ namespace EllipseEntity
 
         BitmapImage IShapeEntity.Icon => throw new NotImplementedException();
 
+        public SolidColorBrush Brush { get; set; }
+        public int Thickness { get; set; }
+        public DoubleCollection StrokeDash { get; set; }
+
         public void HandleStart(Point point)
         {
             TopLeft = point;
@@ -24,6 +29,19 @@ namespace EllipseEntity
         {
             RightBottom = point;
         }
+        public void HandleSolidColorBrush(SolidColorBrush brush)
+        {
+            Brush = brush;
+        }
+        public void HandleThickness(int thickness)
+        {
+            Thickness = thickness;
+        }
+        public void HandleDoubleCollection(DoubleCollection dash)
+        {
+            StrokeDash = dash;
+        }
+
         public object Clone()
         {
             return MemberwiseClone();

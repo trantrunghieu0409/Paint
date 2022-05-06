@@ -24,6 +24,7 @@ using Newtonsoft;
 using System.Diagnostics;
 using Paint.AdvancedFeature;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace Paint
 {
@@ -46,6 +47,10 @@ namespace Paint
         public IShapeEntity? _clipboard = null;
 
         public float zoomRatio { get; set; } = ZoomCommand.DEFAULT_ZOOM_VALUE;
+
+        private static int _currentThickness = 1;
+        private static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
+        private static DoubleCollection _currentDash = null;
 
         public MainWindow()
         {
@@ -116,6 +121,10 @@ namespace Paint
 
                     canvas.Children.Add(shape);
                 }
+
+                _preview.HandleSolidColorBrush(_currentColor);
+                _preview.HandleThickness(_currentThickness);
+                _preview.HandleDoubleCollection(_currentDash);
 
                 var previewPainter = Config.painterPrototypes[_preview.Name];
                 var previewElement = previewPainter.Draw(_preview);
@@ -217,7 +226,7 @@ namespace Paint
                         var element = dict.ElementAt(count);
                         var Key = element.Key;
                         var Value = element.Value;
-                        content += Key + "#" + Value;
+                        content += Key + "@" + Value;
 
                         if (count != dict.Count - 1)
                             content += ";";
@@ -270,14 +279,14 @@ namespace Paint
                 _drawnShapes.Clear();
                 canvas.Children.Clear();
 
-                string[] shapes = content.Split('[', ']', StringSplitOptions.RemoveEmptyEntries);
+                string[] shapes = content.Split("[]".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 foreach (string shape in shapes)
                 {
                     string[] properties = shape.Split(';', StringSplitOptions.RemoveEmptyEntries);
                     Dictionary<string, string> dict = new Dictionary<string, string>();
                     foreach (var property in properties)
                     {
-                        string[] pairs = property.Split('#', StringSplitOptions.RemoveEmptyEntries);
+                        string[] pairs = property.Split('@', StringSplitOptions.RemoveEmptyEntries);
                         dict.Add(pairs[0].Trim(), pairs[1].Trim());
                     }
 
@@ -289,10 +298,25 @@ namespace Paint
                     string[] endCoords = end.Value.Split(',', StringSplitOptions.RemoveEmptyEntries);
                     Point endPoint = new Point(double.Parse(endCoords[0]), double.Parse(endCoords[1]));
 
+                    var color = (Color)ColorConverter.ConvertFromString(dict["Brush"]);
+                    var brush = new SolidColorBrush(color);
+
                     IShapeEntity shapeEntity = (Config.shapesPrototypes[dict["Name"]].Clone() as IShapeEntity)!;
                     shapeEntity.HandleStart(startPoint);
                     shapeEntity.HandleEnd(endPoint);
-                   
+                    shapeEntity.HandleSolidColorBrush(brush);
+                    shapeEntity.HandleThickness(int.Parse(dict["Thickness"]));
+
+                    var dash = dict["StrokeDash"];
+                    if (dash.CompareTo("null") == 0)
+                    {
+                        shapeEntity.HandleDoubleCollection(null);
+                    }
+                    else
+                    {
+                        shapeEntity.HandleDoubleCollection(DoubleCollection.Parse(dash));
+                    }
+
                     containers.Add(shapeEntity);
                 }
             }
@@ -375,7 +399,7 @@ namespace Paint
                     var element = dict.ElementAt(count);
                     var Key = element.Key;
                     var Value = element.Value;
-                    content += Key + "#" + Value;
+                    content += Key + "@" + Value;
 
                     if (count != dict.Count - 1)
                         content += ";";
@@ -427,6 +451,14 @@ namespace Paint
             foreach (PropertyInfo prp in props)
             {
                 object value = prp.GetValue(atype, new object[] { });
+
+                if (prp.Name.CompareTo("StrokeDash") == 0)
+                {
+                    if (value == null)
+                    {
+                        value = "null";
+                    }
+                }
                 dict.Add(prp.Name, value);
             }
             return dict;
@@ -539,62 +571,98 @@ namespace Paint
 
         private void dashComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            int index = dashComboBox.SelectedIndex;
 
+            switch (index)
+            {
+                case 0:
+                    _currentDash = null;
+                    break;
+                case 1:
+                    _currentDash = new DoubleCollection() { 4, 1, 1, 1, 1, 1 };
+                    break;
+                case 2:
+                    _currentDash = new DoubleCollection() { 1, 1 };
+                    break;
+                case 3:
+                    _currentDash = new DoubleCollection() { 6, 1 };
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void sizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            int index = sizeComboBox.SelectedIndex;
 
+            switch (index)
+            {
+                case 0:
+                    _currentThickness = 1;
+                    break;
+                case 1:
+                    _currentThickness = 2;
+                    break;
+                case 2:
+                    _currentThickness = 3;
+                    break;
+                case 3:
+                    _currentThickness = 5;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void btnBasicBlack_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(0, 0, 0));
         }
 
         private void btnBasicOrange_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(255, 165, 0));
         }
 
         private void btnBasicYellow_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(255, 255, 0));
         }
 
         private void btnBasicBlue_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(0, 0, 255));
         }
 
         private void btnBasicGreen_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(0, 255, 0));
         }
 
         private void btnBasicPurple_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(191, 64, 191));
         }
 
         private void btnBasicPink_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(255, 182, 193));
         }
 
         private void btnBasicBrown_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(160, 82, 45));
         }
 
         private void btnBasicGray_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(192, 192, 192));
         }
 
         private void btnBasicRed_Click(object sender, RoutedEventArgs e)
         {
-
+            _currentColor = new SolidColorBrush(Color.FromRgb(255, 0, 0));
         }
 
         private void editColorButton_Click(object sender, RoutedEventArgs e)
