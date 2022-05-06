@@ -100,8 +100,6 @@ namespace Paint.Helpers
 
             // Restore previously saved layout
             surface.LayoutTransform = transform;
-
-
         }
     }
 }
