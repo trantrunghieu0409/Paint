@@ -34,25 +34,25 @@ namespace ImageEntity
         }
         public void HandleEnd(Point point)
         {
-            
+            // do nothing 
         }
 
         public void HandleSolidColorBrush(SolidColorBrush brush)
         {
-            Brush = brush;
+            // do nothing 
         }
         public void HandleThickness(int thickness)
         {
-            Thickness = thickness;
+            // do nothing 
         }
         public void HandleDoubleCollection(DoubleCollection dash)
         {
-            StrokeDash = dash;
+            // do nothing 
         }
 
         public void HandleBackground(SolidColorBrush background)
         {
-            Background = background;
+            // do nothing 
         }
 
         public object Clone()
