@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineEntity", "LineEntity\Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RectangleEntity", "RectangleEntity\RectangleEntity.csproj", "{6AE0E53B-E327-47BE-948F-C2F5FB551EA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EllipseEntity", "EllipseEntity\EllipseEntity.csproj", "{927319FB-EEDB-4B6C-AE7C-9DF4BC65948F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EllipseEntity", "EllipseEntity\EllipseEntity.csproj", "{927319FB-EEDB-4B6C-AE7C-9DF4BC65948F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageEntity", "ImageEntity\ImageEntity.csproj", "{85169D18-0362-4613-90F0-54EAC4974C4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{927319FB-EEDB-4B6C-AE7C-9DF4BC65948F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{927319FB-EEDB-4B6C-AE7C-9DF4BC65948F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{927319FB-EEDB-4B6C-AE7C-9DF4BC65948F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85169D18-0362-4613-90F0-54EAC4974C4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85169D18-0362-4613-90F0-54EAC4974C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85169D18-0362-4613-90F0-54EAC4974C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85169D18-0362-4613-90F0-54EAC4974C4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
