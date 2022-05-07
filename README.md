@@ -57,6 +57,8 @@ Nếu sử dụng **Point** thì cần include System.Windows, ***không include
 
 **13. Using command pattern**
 
+**14. Applying Windows Ribbon Framework to the User Interface**
+
 ## Điểm đề nghị 
 
 **13 điểm**
