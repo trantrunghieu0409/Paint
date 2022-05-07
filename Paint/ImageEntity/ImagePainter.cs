@@ -20,7 +20,7 @@ namespace ImageEntity
 
             // TODO: chú ý việc đảo lại rightbottom và topleft 
 
-            while(image.Image == null)
+            while (image.Image == null)
             {
                 var dialog = new System.Windows.Forms.OpenFileDialog();
                 dialog.Filter = "PNG (*.png)|*.png| JPEG (*.jpeg)|*.jpeg| BMP (*.bmp)|*.bmp";
@@ -53,10 +53,7 @@ namespace ImageEntity
             Canvas.SetTop(element, image.TopLeft.Y);
             Canvas.SetLeft(element, image.TopLeft.X);
 
-            return element;          
-
-            
-            
+            return element;
         }
     }
 }

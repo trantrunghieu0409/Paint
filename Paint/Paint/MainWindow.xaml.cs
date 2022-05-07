@@ -45,7 +45,7 @@ namespace Paint
         string _backgroundImagePath = "";
         public IShapeEntity? _choosenShape = null;
         public IShapeEntity? _clipboard = null;
-        public List<Image> _images = new List<Image>();
+        //public List<Image> _images = new List<Image>();
         public Point tmp_position = new Point();
         
         public float zoomRatio { get; set; } = ZoomCommand.DEFAULT_ZOOM_VALUE;
@@ -129,10 +129,10 @@ namespace Paint
                     canvas.Children.Add(shape);
                 }
 
-                foreach(var item in _images)
+                /*foreach(var item in _images)
                 {
                     canvas.Children.Add(item);
-                }
+                }*/
 
                 _preview.HandleSolidColorBrush(_currentColor);
                 _preview.HandleThickness(_currentThickness);
@@ -240,6 +240,9 @@ namespace Paint
                 {
                     var dict = DictionaryFromType(_drawnShapes.ElementAt(index));
 
+                    if (dict["Name"].ToString() == "Image")
+                        continue;
+
                     content += "[";
                     for (int count = 0; count < dict.Count; count++)
                     {
@@ -309,43 +312,47 @@ namespace Paint
                         dict.Add(pairs[0].Trim(), pairs[1].Trim());
                     }
 
+                    IShapeEntity shapeEntity = (Config.shapesPrototypes[dict["Name"]].Clone() as IShapeEntity)!;
+
                     var start = dict.ElementAt(0);
                     string[] startCoords = start.Value.Split(',', StringSplitOptions.RemoveEmptyEntries);
                     Point startPoint = new Point(double.Parse(startCoords[0]), double.Parse(startCoords[1]));
+                    shapeEntity.HandleStart(startPoint);
 
                     var end = dict.ElementAt(1);
                     string[] endCoords = end.Value.Split(',', StringSplitOptions.RemoveEmptyEntries);
                     Point endPoint = new Point(double.Parse(endCoords[0]), double.Parse(endCoords[1]));
-
-                    var color = (Color)ColorConverter.ConvertFromString(dict["Brush"]);
-                    var brush = new SolidColorBrush(color);
-
-                    IShapeEntity shapeEntity = (Config.shapesPrototypes[dict["Name"]].Clone() as IShapeEntity)!;
-                    shapeEntity.HandleStart(startPoint);
                     shapeEntity.HandleEnd(endPoint);
-                    shapeEntity.HandleSolidColorBrush(brush);
+
+                    if (dict["Brush"].CompareTo("null") == 0)
+                    {
+                        shapeEntity.HandleSolidColorBrush(new SolidColorBrush(Colors.Red));
+                    }
+                    else
+                    {
+                        shapeEntity.HandleSolidColorBrush(new SolidColorBrush((Color)ColorConverter.ConvertFromString(dict["Brush"])));
+                    }
+
                     shapeEntity.HandleThickness(int.Parse(dict["Thickness"]));
 
-                    var dash = dict["StrokeDash"];
-                    if (dash.CompareTo("null") == 0)
+                    if (dict["StrokeDash"].CompareTo("null") == 0)
                     {
                         shapeEntity.HandleDoubleCollection(null);
                     }
                     else
                     {
-                        shapeEntity.HandleDoubleCollection(DoubleCollection.Parse(dash));
+                        shapeEntity.HandleDoubleCollection(DoubleCollection.Parse(dict["StrokeDash"]));
                     }
 
                     if (dict.ContainsKey("Background"))
                     {
-                        var backgroundColor = dict["Background"];
-                        if (backgroundColor.CompareTo("null") == 0)
+                        if (dict["Background"].CompareTo("null") == 0)
                         {
                             shapeEntity.HandleBackground(null);
                         }
                         else
                         {
-                            shapeEntity.HandleBackground(new SolidColorBrush((Color)ColorConverter.ConvertFromString(backgroundColor)));
+                            shapeEntity.HandleBackground(new SolidColorBrush((Color)ColorConverter.ConvertFromString(dict["Background"])));
                         }
                     }
 
@@ -422,6 +429,8 @@ namespace Paint
             for (int index = 0; index < _drawnShapes.Count; index++)
             {
                 var dict = DictionaryFromType(_drawnShapes.ElementAt(index));
+                if (dict["Name"].ToString() == "Image")
+                    continue;
 
                 content += "[";
                 for (int count = 0; count < dict.Count; count++)
@@ -480,21 +489,10 @@ namespace Paint
             {
                 object value = prp.GetValue(atype, new object[] { });
 
-                if (prp.Name.CompareTo("StrokeDash") == 0)
+                if (value == null)
                 {
-                    if (value == null)
-                    {
-                        value = "null";
-                    }
+                    value = "null";
                 }
-                else if (prp.Name.CompareTo("Background") == 0)
-                {
-                    if (value == null)
-                    {
-                        value = "null";
-                    }
-                }
-
 
                 dict.Add(prp.Name, value);
             }
@@ -511,7 +509,7 @@ namespace Paint
             _isDrawing = false;
 
             _drawnShapes.Clear();
-            _images.Clear();
+            //_images.Clear();
 
             _backgroundImagePath = "";
 
@@ -753,7 +751,7 @@ namespace Paint
 
         private void insertItem_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.OpenFileDialog();
+            /*var dialog = new System.Windows.Forms.OpenFileDialog();
             dialog.Filter = "PNG (*.png)|*.png| JPEG (*.jpeg)|*.jpeg| BMP (*.bmp)|*.bmp";
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -772,10 +770,8 @@ namespace Paint
                 Canvas.SetLeft(result1, tmp_position.X);
                 _images.Add(result1 as Image);
 
-                
                 canvas.Children.Add(result1);
-                
-            }
+            }*/
         }
 
         private void MenuItem_MouseUp(object sender, MouseButtonEventArgs e)

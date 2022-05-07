@@ -13,6 +13,8 @@ namespace ImageEntity
     public class ImageEntity : IShapeEntity, ICloneable
     {
         public Point TopLeft { get; set; }
+        public Point RightBottom { get; set; }
+
         public float Width;
         public float Height;
 
@@ -20,7 +22,7 @@ namespace ImageEntity
 
         public BitmapImage Icon => new BitmapImage(new Uri("Images/insert.png", UriKind.Relative));
 
-        public BitmapImage Image;
+        public BitmapImage Image { get; set; }
 
         public SolidColorBrush Brush { get; set; }
         public SolidColorBrush Background { get; set; }
