@@ -39,7 +39,7 @@ Nếu sử dụng **Point** thì cần include System.Windows, ***không include
 
 **4. The user can finish the drawing preview and their change becomes permanent with previously drawn objects**
 
-**5. The list of drawn objects can be saved and loaded again for continuing later**
+**5. The list of drawn objects can be saved and loaded again for continuing later in self-defined binary format**
 
 **6. Save and load all drawn objects as an image in bmp/png/jpg format (rasterization).**
 
@@ -62,6 +62,7 @@ Nếu sử dụng **Point** thì cần include System.Windows, ***không include
 **13 điểm**
 
 ## Link video demo
+https://youtu.be/9eYk_OeLPLU
 
 
 
